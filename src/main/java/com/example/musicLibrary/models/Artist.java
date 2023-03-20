@@ -17,7 +17,7 @@ public class Artist {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Column(name = "artist_name")
     private String name;
@@ -28,13 +28,12 @@ public class Artist {
     @Column(name = "artist_date_of_birth")
     private int dateOfBirth;
 
-    @OneToMany(mappedBy = "artistSong")
+    @OneToMany(mappedBy = "artistSongs")
     private List<Song> songs;
 
-    @OneToMany(mappedBy = "artist")
+    @OneToMany(mappedBy = "artistAlbums")
     private List<Album> albums;
 
-
-
-
+    @OneToMany(mappedBy = "artistGenres")
+    private List<Genre> genres;
 }

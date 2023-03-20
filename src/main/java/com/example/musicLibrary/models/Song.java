@@ -27,7 +27,7 @@ public class Song {
 
     @ManyToOne
     @JoinColumn(name = "artist_id", referencedColumnName = "id")
-    private Artist artistSong;
+    private Artist artistSongs;
 
     @ManyToMany
     @JoinTable(

@@ -24,7 +24,7 @@ public class Album {
 
         @ManyToOne
         @JoinColumn(name = "artist_id", referencedColumnName = "id")
-        private Artist artist;
+        private Artist artistAlbums;
 
         @ManyToOne
         @JoinColumn(name = "genre_id", referencedColumnName = "id")
