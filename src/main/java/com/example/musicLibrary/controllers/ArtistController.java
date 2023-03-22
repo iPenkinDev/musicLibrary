@@ -1,10 +1,11 @@
 package com.example.musicLibrary.controllers;
 
+import com.example.musicLibrary.dto.ArtistDTO;
 import com.example.musicLibrary.models.Artist;
-import com.example.musicLibrary.services.ArtistService;
 import com.example.musicLibrary.services.impl.ArtistServiceImpl;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class ArtistController {
         this.artistService = artistService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Artist createArtist(@RequestBody Artist artist) {
         return artistService.createArtist(artist);
     }
@@ -30,18 +31,19 @@ public class ArtistController {
         return artistService.getArtistById(id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Artist> getAllArtists() {
         return artistService.getAllArtists();
     }
 
-    @PutMapping("/{id}")
-    public void updateArtist(@RequestBody Artist artist, @PathVariable long id) {
-        artistService.updateArtist(artist, id);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistDTO artistDTO, @PathVariable(name = "id") long id) {
+        ArtistDTO response = artistService.updateArtist(artistDTO, id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/delete/{id}")
-    public void deleteArtist(@PathVariable long id) {
+    @DeleteMapping("/{id}")
+    public void deleteArtist(@PathVariable(name = "id") long id) {
         artistService.deleteArtist(id);
     }
 }

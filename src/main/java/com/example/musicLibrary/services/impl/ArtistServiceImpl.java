@@ -1,10 +1,12 @@
 package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
+import com.example.musicLibrary.dto.ArtistDTO;
 import com.example.musicLibrary.models.Artist;
 import com.example.musicLibrary.services.ArtistService;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ import java.util.List;
 public class ArtistServiceImpl implements ArtistService {
 
     private ArtistDaoImpl artistDao;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public ArtistServiceImpl(ArtistDaoImpl artistDao) {
+    public ArtistServiceImpl(ArtistDaoImpl artistDao, ModelMapper modelMapper) {
         this.artistDao = artistDao;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -38,13 +42,29 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     @Transactional
-    public void updateArtist(Artist artist, long id) {
-        artistDao.updateArtist(artist, id);
+    public ArtistDTO updateArtist(ArtistDTO artistDTO, long id) {
+        Artist artistUpdate = artistDao.getArtistById(id);
+        artistUpdate.setName(artistDTO.getName());
+        artistUpdate.setCountry(artistDTO.getCountry());
+        artistUpdate.setDateOfBirth(artistDTO.getDateOfBirth());
+
+        Artist newArtist = artistDao.updateArtist(artistUpdate);
+        return mapToDTO(newArtist);
     }
 
     @Override
     @Transactional
     public void deleteArtist(long id) {
         artistDao.deleteArtist(id);
+    }
+
+    private Artist mapToEntity(ArtistDTO artistDTO) {
+        return modelMapper.map(artistDTO, Artist.class);
+    }
+
+    private ArtistDTO mapToDTO(Artist newArtist) {
+
+
+        return modelMapper.map(newArtist, ArtistDTO.class);
     }
 }

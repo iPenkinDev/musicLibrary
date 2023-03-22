@@ -2,15 +2,13 @@ package com.example.musicLibrary.dao.impl;
 
 import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.models.Artist;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-
 import java.util.List;
 
-@SuppressWarnings("JpaQlInspection")
 @Repository
 public class ArtistDaoImpl implements ArtistDAO {
 
@@ -23,6 +21,7 @@ public class ArtistDaoImpl implements ArtistDAO {
     }
 
     @Override
+    @Transactional
     public Artist createArtist(Artist artist) {
         entityManager.persist(artist);
         return artist;
@@ -35,17 +34,16 @@ public class ArtistDaoImpl implements ArtistDAO {
 
     @Override
     public List<Artist> getAllArtists() {
-        return entityManager.createQuery("SELECT a FROM artists a", Artist.class).getResultList();
+        TypedQuery<Artist> query = entityManager.createQuery("SELECT a FROM Artist a", Artist.class);
+        return query.getResultList();
     }
 
     @Override
-    public void updateArtist(Artist artist, long id) {
-        Artist artistToUpdate = getArtistById(id);
-        artistToUpdate.setName(artist.getName());
-        artistToUpdate.setGenres(artist.getGenres());
-        artistToUpdate.setAlbums(artist.getAlbums());
-        artistToUpdate.setSongs(artist.getSongs());
-        entityManager.persist(artistToUpdate);
+    @Transactional
+    public Artist updateArtist(Artist artist) {
+        entityManager.merge(artist);
+        System.out.println("Artist with name " + artist.getName() + " was updated");
+        return artist;
     }
 
     @Override
@@ -53,5 +51,4 @@ public class ArtistDaoImpl implements ArtistDAO {
         entityManager.remove(getArtistById(id));
         System.out.println("Artist with id " + id + " was deleted");
     }
-
 }
