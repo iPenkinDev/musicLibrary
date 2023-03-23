@@ -3,6 +3,7 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
 import com.example.musicLibrary.dto.ArtistDTO;
 import com.example.musicLibrary.models.Artist;
+import com.example.musicLibrary.models.Song;
 import com.example.musicLibrary.services.ArtistService;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -58,13 +59,15 @@ public class ArtistServiceImpl implements ArtistService {
         artistDao.deleteArtist(id);
     }
 
+    public List<Song> getSongsByArtistId(long id) {
+        return artistDao.getArtistById(id).getSongs();
+    }
+
     private Artist mapToEntity(ArtistDTO artistDTO) {
         return modelMapper.map(artistDTO, Artist.class);
     }
 
     private ArtistDTO mapToDTO(Artist newArtist) {
-
-
         return modelMapper.map(newArtist, ArtistDTO.class);
     }
 }

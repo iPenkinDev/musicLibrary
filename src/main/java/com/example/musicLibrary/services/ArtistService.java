@@ -2,6 +2,7 @@ package com.example.musicLibrary.services;
 
 import com.example.musicLibrary.dto.ArtistDTO;
 import com.example.musicLibrary.models.Artist;
+import com.example.musicLibrary.models.Song;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface ArtistService {
     public List<Artist> getAllArtists();
     public ArtistDTO updateArtist(ArtistDTO artistDTO, long id);
     public void deleteArtist(long id);
+    List<Song> getSongsByArtistId(long id);
 }
