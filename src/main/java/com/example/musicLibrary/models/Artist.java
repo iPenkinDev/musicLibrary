@@ -28,12 +28,7 @@ public class Artist {
     @Column(name = "artist_date_of_birth")
     private int dateOfBirth;
 
-    @OneToMany(mappedBy = "artistSongs")
-    private List<Song> songs;
-
-    @OneToMany(mappedBy = "artistAlbums")
+    @OneToMany(mappedBy = "artistAlbums", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Album> albums;
 
-    @OneToMany(mappedBy = "artistGenres")
-    private List<Genre> genres;
 }

@@ -10,5 +10,4 @@ public class AlbumDTO {
     private String title;
     private int year;
     private Artist artistAlbums;
-    private Genre genre;
 }

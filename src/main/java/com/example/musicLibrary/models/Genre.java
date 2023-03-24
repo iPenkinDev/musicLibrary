@@ -24,11 +24,4 @@ public class Genre {
 
     @ManyToMany(mappedBy = "genres")
     private List<Song> songs;
-
-    @ManyToOne
-    @JoinColumn(name = "artist_id", referencedColumnName = "id")
-    private Artist artistGenres;
-
-
-
 }

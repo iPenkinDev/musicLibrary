@@ -12,6 +12,5 @@ public class ArtistDTO {
     private String name;
     private String country;
     private int dateOfBirth;
-    private List<Song> songs;
     private List<Album> albums;
 }

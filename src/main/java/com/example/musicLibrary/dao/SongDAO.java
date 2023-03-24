@@ -15,6 +15,4 @@ public interface SongDAO {
     public Song updateSong(Song song);
 
     public void deleteSong(long id);
-
-    List<Artist> getSongOwner(long id);
 }

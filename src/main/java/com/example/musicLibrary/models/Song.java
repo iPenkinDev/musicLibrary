@@ -25,10 +25,6 @@ public class Song {
     @Column(name = "song_year")
     private int year;
 
-    @ManyToOne
-    @JoinColumn(name = "artist_id", referencedColumnName = "id")
-    private Artist artistSongs;
-
     @ManyToMany
     @JoinTable(
             name = "song_genre",

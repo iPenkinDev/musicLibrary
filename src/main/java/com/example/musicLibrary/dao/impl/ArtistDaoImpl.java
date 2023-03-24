@@ -1,6 +1,7 @@
 package com.example.musicLibrary.dao.impl;
 
 import com.example.musicLibrary.dao.ArtistDAO;
+import com.example.musicLibrary.models.Album;
 import com.example.musicLibrary.models.Artist;
 import com.example.musicLibrary.models.Song;
 import jakarta.persistence.EntityManager;
@@ -53,8 +54,8 @@ public class ArtistDaoImpl implements ArtistDAO {
     }
 
     @Override
-    public List<Song> getSongsByArtistId(long id) {
-        TypedQuery<Song> query = entityManager.createQuery("SELECT s FROM Song s WHERE s.artistSongs.id = :id", Song.class);
+    public List<Album> getAlbumsArtist(long id) {
+        TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a WHERE a.artistAlbums = :id", Album.class);
         query.setParameter("id", id);
         return query.getResultList();
     }

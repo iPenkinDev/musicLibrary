@@ -1,5 +1,6 @@
 package com.example.musicLibrary.dao;
 
+import com.example.musicLibrary.models.Album;
 import com.example.musicLibrary.models.Artist;
 import com.example.musicLibrary.models.Song;
 
@@ -15,6 +16,5 @@ public interface ArtistDAO {
     public Artist updateArtist(Artist artist);
 
     public void deleteArtist(long id);
-
-    List<Song> getSongsByArtistId(long id);
+    List<Album> getAlbumsArtist(long id);
 }
