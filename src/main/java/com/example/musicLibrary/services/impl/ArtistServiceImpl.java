@@ -2,6 +2,7 @@ package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
 import com.example.musicLibrary.dto.ArtistDTO;
+import com.example.musicLibrary.models.Album;
 import com.example.musicLibrary.models.Artist;
 import com.example.musicLibrary.models.Song;
 import com.example.musicLibrary.services.ArtistService;
@@ -57,10 +58,6 @@ public class ArtistServiceImpl implements ArtistService {
     @Transactional
     public void deleteArtist(long id) {
         artistDao.deleteArtist(id);
-    }
-
-    public List<Song> getSongsByArtistId(long id) {
-        return artistDao.getArtistById(id).getSongs();
     }
 
     private Artist mapToEntity(ArtistDTO artistDTO) {

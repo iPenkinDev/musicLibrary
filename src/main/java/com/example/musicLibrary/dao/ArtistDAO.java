@@ -16,5 +16,5 @@ public interface ArtistDAO {
     public Artist updateArtist(Artist artist);
 
     public void deleteArtist(long id);
-    List<Album> getAlbumsArtist(long id);
+
 }

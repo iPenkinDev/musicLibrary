@@ -15,5 +15,5 @@ public interface ArtistService {
     public List<Artist> getAllArtists();
     public ArtistDTO updateArtist(ArtistDTO artistDTO, long id);
     public void deleteArtist(long id);
-    List<Album> getAlbumsArtist(long id);
+
 }
