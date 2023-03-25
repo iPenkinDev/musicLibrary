@@ -73,6 +73,17 @@ public class SongServiceImpl implements SongService {
         return mapToDTO(songDao.getSongByAlbumIdAndSongId(albumId, songId));
     }
 
+    @Override
+    public List<SongDTO> getSongsByArtistId(long artistId) {
+        List<Song> songList = songDao.getSongsByArtistId(artistId);
+        return songList.stream().map(this::mapToDTO).toList();
+    }
+
+    @Override
+    public SongDTO getSongByArtistIdAndSongId(long artistId, long songId) {
+        return mapToDTO(songDao.getSongByArtistIdAndSongId(artistId, songId));
+    }
+
     private Song mapToEntity(SongDTO songDTO) {
         return modelMapper.map(songDTO, Song.class);
     }

@@ -1,5 +1,8 @@
 package com.example.musicLibrary.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +15,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Album {
 
         @Id
@@ -29,6 +35,7 @@ public class Album {
         @JoinColumn(name = "artist_id", referencedColumnName = "id")
         private Artist artist;
 
+        @JsonIgnore
         @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
         private List<Song> songs;
 }

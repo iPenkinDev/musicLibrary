@@ -3,6 +3,7 @@ package com.example.musicLibrary.controllers;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
 import com.example.musicLibrary.services.SongService;
+import com.example.musicLibrary.services.impl.SongServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,10 @@ import java.util.List;
 @RequestMapping("/songs")
 public class SongController {
 
-    private final SongService songService;
+    private final SongServiceImpl songService;
 
     @Autowired
-    public SongController(SongService songService) {
+    public SongController(SongServiceImpl songService) {
         this.songService = songService;
     }
 
@@ -56,5 +57,15 @@ public class SongController {
     @GetMapping("/album/{album_id}/song/{song_id}")
     public SongDTO getSongByAlbumIdAndSongId(@PathVariable(name = "album_id") long albumId, @PathVariable(name = "song_id") long songId) {
         return songService.getSongByAlbumIdAndSongId(albumId, songId);
+    }
+
+    @GetMapping("/artist/{artist_id}")
+    public List<SongDTO> getSongsByArtistId(@PathVariable(name = "artist_id") long artistId) {
+        return songService.getSongsByArtistId(artistId);
+    }
+
+    @GetMapping("/artist/{artist_id}/song/{song_id}")
+    public SongDTO getSongByArtistIdAndSongId(@PathVariable(name = "artist_id") long artistId, @PathVariable(name = "song_id") long songId) {
+        return songService.getSongByArtistIdAndSongId(artistId, songId);
     }
 }

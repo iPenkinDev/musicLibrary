@@ -18,4 +18,8 @@ public interface SongDAO {
     List<Song> getSongsByAlbumId(long albumId);
 
     Song getSongByAlbumIdAndSongId(long albumId, long songId);
+
+    List<Song> getSongsByArtistId(long artistId);
+
+    Song getSongByArtistIdAndSongId(long artistId, long songId);
 }

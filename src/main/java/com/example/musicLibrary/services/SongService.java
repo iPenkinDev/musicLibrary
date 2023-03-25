@@ -22,4 +22,8 @@ public interface SongService {
     List<SongDTO> getSongsByAlbumId(long albumId);
 
     SongDTO getSongByAlbumIdAndSongId(long albumId, long songId);
+
+    List<SongDTO> getSongsByArtistId(long artistId);
+
+    SongDTO getSongByArtistIdAndSongId(long artistId, long songId);
 }
