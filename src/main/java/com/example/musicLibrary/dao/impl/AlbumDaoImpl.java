@@ -2,6 +2,7 @@ package com.example.musicLibrary.dao.impl;
 
 import com.example.musicLibrary.dao.AlbumDAO;
 import com.example.musicLibrary.entity.Album;
+import com.example.musicLibrary.entity.Artist;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@SuppressWarnings("JpaQlInspection")
 @Repository
 @Transactional(readOnly = true)
 public class AlbumDaoImpl implements AlbumDAO {
@@ -48,16 +50,16 @@ public class AlbumDaoImpl implements AlbumDAO {
 
     @Override
     public List<Album> getAlbumsByArtistId(long artistId) {
-        TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a WHERE a.artistAlbums = :artistId", Album.class);
-        query.setParameter("artist_id", artistId);
+        TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a WHERE a.artistAlbums.id = :artistId", Album.class);
+        query.setParameter("artistId", artistId);
         return query.getResultList();
     }
 
     @Override
     public Album getAlbumByArtistIdAndAlbumId(long artistId, long albumId) {
         TypedQuery<Album> query = entityManager
-                .createQuery("SELECT a FROM Album a WHERE a.artistAlbums = :artistId AND a.id = :albumId", Album.class);
-        query.setParameter("artist_id", artistId);
+                .createQuery("SELECT a FROM Album a WHERE a.artistAlbums.id = :artistId AND a.id = :albumId", Album.class);
+        query.setParameter("artistId", artistId);
         query.setParameter("id", albumId);
         return query.getSingleResult();
     }

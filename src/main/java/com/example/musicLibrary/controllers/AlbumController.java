@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/albums")
 public class AlbumController {
@@ -37,12 +39,15 @@ public class AlbumController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{id}")
     public void deleteAlbum(@PathVariable(name = "id") long id) {
         albumService.deleteAlbum(id);
     }
 
+    @GetMapping("/artist/{artist_id}")
+    public List<AlbumDTO> getAlbumsByArtistId(@PathVariable(name = "artist_id") long artistId) {
+        return albumService.getAlbumsByArtistId(artistId);
+    }
 //    @GetMapping("/{id}/album-owner")
 //    public Artist getAlbumOwner(@PathVariable Long id) {
 //        return artistService.getArtistById(id);

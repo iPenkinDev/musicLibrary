@@ -1,6 +1,7 @@
 package com.example.musicLibrary.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,7 @@ public class Artist {
     @Column(name = "artist_date_of_birth")
     private int dateOfBirth;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "artistAlbums", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albums;
 }

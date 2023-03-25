@@ -7,10 +7,10 @@ import java.util.List;
 
 
 public interface AlbumService {
-    public AlbumDTO createAlbum(AlbumDTO albumDTO, long artistId);
-    public AlbumDTO getAlbumById(long id);
-    public AlbumDTO updateAlbum(AlbumForm albumForm);
-    public void deleteAlbum(long id);
+    AlbumDTO createAlbum(AlbumDTO albumDTO, long artistId);
+    AlbumDTO getAlbumById(long id);
+    AlbumDTO updateAlbum(AlbumForm albumForm);
+    void deleteAlbum(long id);
     List<AlbumDTO> getAlbumsByArtistId(long artistId);
     AlbumDTO getAlbumByArtistIdAndAlbumId(long artistId, long albumId);
 }
