@@ -1,6 +1,6 @@
 package com.example.musicLibrary.dto;
 
-import com.example.musicLibrary.models.Artist;
+import com.example.musicLibrary.entity.Artist;
 import lombok.Data;
 
 @Data

@@ -1,7 +1,7 @@
 package com.example.musicLibrary.controllers;
 
 import com.example.musicLibrary.dto.ArtistDTO;
-import com.example.musicLibrary.models.Artist;
+import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.impl.ArtistServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

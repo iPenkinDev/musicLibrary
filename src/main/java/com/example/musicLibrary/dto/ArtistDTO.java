@@ -1,7 +1,6 @@
 package com.example.musicLibrary.dto;
 
-import com.example.musicLibrary.models.Album;
-import com.example.musicLibrary.models.Song;
+import com.example.musicLibrary.entity.Album;
 import lombok.Data;
 
 import java.util.List;

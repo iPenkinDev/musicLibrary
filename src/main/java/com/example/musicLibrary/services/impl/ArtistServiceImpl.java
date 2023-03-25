@@ -2,11 +2,8 @@ package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
 import com.example.musicLibrary.dto.ArtistDTO;
-import com.example.musicLibrary.models.Album;
-import com.example.musicLibrary.models.Artist;
-import com.example.musicLibrary.models.Song;
+import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.ArtistService;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +14,8 @@ import java.util.List;
 @Service
 public class ArtistServiceImpl implements ArtistService {
 
-    private ArtistDaoImpl artistDao;
-    private ModelMapper modelMapper;
+    private final ArtistDaoImpl artistDao;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public ArtistServiceImpl(ArtistDaoImpl artistDao, ModelMapper modelMapper) {

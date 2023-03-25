@@ -1,19 +1,22 @@
-package com.example.musicLibrary.models;
+package com.example.musicLibrary.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "artists")
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Artist {
 
     @Id
@@ -32,25 +35,4 @@ public class Artist {
 
     @OneToMany(mappedBy = "artistAlbums", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albums;
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public int getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    @JsonManagedReference
-    public List<Album> getAlbums() {
-        return albums;
-    }
 }

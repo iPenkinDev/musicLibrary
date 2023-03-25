@@ -1,15 +1,13 @@
-package com.example.musicLibrary.models;
+package com.example.musicLibrary.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "albums")
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Album {
@@ -25,24 +23,7 @@ public class Album {
         @Column(name = "album_year")
         private int year;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "artist_id", referencedColumnName = "id")
         private Artist artistAlbums;
-
-        public long getId() {
-                return id;
-        }
-
-        public String getTitle() {
-                return title;
-        }
-
-        public int getYear() {
-                return year;
-        }
-
-        @JsonBackReference
-        public Artist getArtistAlbums() {
-                return artistAlbums;
-        }
 }

@@ -1,20 +1,18 @@
 package com.example.musicLibrary.dao;
 
-import com.example.musicLibrary.models.Album;
-import com.example.musicLibrary.models.Artist;
-import com.example.musicLibrary.models.Song;
+import com.example.musicLibrary.entity.Artist;
 
 import java.util.List;
 
 public interface ArtistDAO {
-    public Artist createArtist(Artist artist);
+    Artist createArtist(Artist artist);
 
-    public Artist getArtistById(long id);
+    Artist getArtistById(long id);
 
-    public List<Artist> getAllArtists();
+    List<Artist> getAllArtists();
 
-    public Artist updateArtist(Artist artist);
+    Artist updateArtist(Artist artist);
 
-    public void deleteArtist(long id);
+    void deleteArtist(long id);
 
 }

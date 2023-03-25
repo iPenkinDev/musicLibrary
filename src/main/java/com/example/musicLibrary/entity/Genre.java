@@ -1,4 +1,4 @@
-package com.example.musicLibrary.models;
+package com.example.musicLibrary.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

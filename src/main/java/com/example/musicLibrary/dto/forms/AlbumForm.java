@@ -1,6 +1,5 @@
 package com.example.musicLibrary.dto.forms;
 
-import com.example.musicLibrary.models.Artist;
 import lombok.Data;
 
 @Data

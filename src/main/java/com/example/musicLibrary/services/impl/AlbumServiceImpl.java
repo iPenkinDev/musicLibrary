@@ -4,10 +4,9 @@ import com.example.musicLibrary.dao.impl.AlbumDaoImpl;
 import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
 import com.example.musicLibrary.dto.AlbumDTO;
 import com.example.musicLibrary.dto.forms.AlbumForm;
-import com.example.musicLibrary.models.Album;
-import com.example.musicLibrary.models.Artist;
+import com.example.musicLibrary.entity.Album;
+import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.AlbumService;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,9 @@ import java.util.List;
 @Service
 public class AlbumServiceImpl implements AlbumService {
 
-    private AlbumDaoImpl albumDao;
-    private ArtistDaoImpl artistDao;
-    private ModelMapper modelMapper;
+    private final AlbumDaoImpl albumDao;
+    private final ArtistDaoImpl artistDao;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public AlbumServiceImpl(AlbumDaoImpl albumDao, ModelMapper modelMapper, ArtistDaoImpl artistDao) {

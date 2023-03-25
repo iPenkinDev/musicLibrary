@@ -1,9 +1,7 @@
 package com.example.musicLibrary.services;
 
 import com.example.musicLibrary.dto.ArtistDTO;
-import com.example.musicLibrary.models.Album;
-import com.example.musicLibrary.models.Artist;
-import com.example.musicLibrary.models.Song;
+import com.example.musicLibrary.entity.Artist;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

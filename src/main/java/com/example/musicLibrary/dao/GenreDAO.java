@@ -1,6 +1,6 @@
 package com.example.musicLibrary.dao;
 
-import com.example.musicLibrary.models.Genre;
+import com.example.musicLibrary.entity.Genre;
 
 import java.util.List;
 
