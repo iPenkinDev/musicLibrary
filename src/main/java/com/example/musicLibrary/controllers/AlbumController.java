@@ -33,6 +33,11 @@ public class AlbumController {
         return albumService.getAlbumById(id);
     }
 
+    @GetMapping("/all")
+    public List<AlbumDTO> getAllAlbums() {
+        return albumService.getAllAlbums();
+    }
+
     @PutMapping("/update")
     public ResponseEntity<AlbumDTO> updateAlbum(@RequestBody AlbumForm albumForm) {
         AlbumDTO response = albumService.updateAlbum(albumForm);

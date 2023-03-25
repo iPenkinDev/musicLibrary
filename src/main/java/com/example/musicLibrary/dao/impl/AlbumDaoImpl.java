@@ -31,6 +31,12 @@ public class AlbumDaoImpl implements AlbumDAO {
         return entityManager.find(Album.class, id);
     }
 
+    @Override
+    public List<Album> getAllAlbums() {
+        TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a", Album.class);
+        return query.getResultList();
+    }
+
 
     @Override
     @Transactional
@@ -50,7 +56,7 @@ public class AlbumDaoImpl implements AlbumDAO {
 
     @Override
     public List<Album> getAlbumsByArtistId(long artistId) {
-        TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a WHERE a.artistAlbums.id = :artistId", Album.class);
+        TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a WHERE a.artist.id = :artistId", Album.class);
         query.setParameter("artistId", artistId);
         return query.getResultList();
     }
@@ -58,7 +64,7 @@ public class AlbumDaoImpl implements AlbumDAO {
     @Override
     public Album getAlbumByArtistIdAndAlbumId(long artistId, long albumId) {
         TypedQuery<Album> query = entityManager
-                .createQuery("SELECT a FROM Album a WHERE a.artistAlbums.id = :artistId AND a.id = :albumId", Album.class);
+                .createQuery("SELECT a FROM Album a WHERE a.artist.id = :artistId AND a.id = :albumId", Album.class);
         query.setParameter("artistId", artistId);
         query.setParameter("albumId", albumId);
         return query.getSingleResult();

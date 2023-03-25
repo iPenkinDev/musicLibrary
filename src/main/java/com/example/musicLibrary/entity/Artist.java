@@ -35,6 +35,6 @@ public class Artist {
     private int dateOfBirth;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "artistAlbums", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albums;
 }

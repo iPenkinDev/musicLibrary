@@ -30,14 +30,19 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public AlbumDTO createAlbum(AlbumDTO albumDTO, long artistId) {
         Artist artist = artistDao.getArtistById(artistId);
-        albumDTO.setArtistAlbums(artist);
-
+        albumDTO.setArtist(artist);
         return mapToDTO(albumDao.createAlbum(mapToEntity(albumDTO)));
     }
 
     @Override
     public AlbumDTO getAlbumById(long id) {
         return mapToDTO(albumDao.getAlbumById(id));
+    }
+
+    @Override
+    public List<AlbumDTO> getAllAlbums() {
+        List<Album> albumList = albumDao.getAllAlbums();
+        return albumList.stream().map(this::mapToDTO).toList();
     }
 
 
@@ -47,7 +52,7 @@ public class AlbumServiceImpl implements AlbumService {
         Artist artist = artistDao.getArtistById(albumForm.getArtistId());
         albumUpdate.setTitle(albumForm.getTitle());
         albumUpdate.setYear(albumForm.getYear());
-        albumUpdate.setArtistAlbums(artist);
+        albumUpdate.setArtist(artist);
 
         Album newAlbum = albumDao.updateAlbum(albumUpdate);
         return mapToDTO(newAlbum);

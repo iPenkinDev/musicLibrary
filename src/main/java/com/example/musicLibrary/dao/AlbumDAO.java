@@ -9,6 +9,8 @@ public interface AlbumDAO {
 
     Album getAlbumById(long id);
 
+    List<Album> getAllAlbums();
+
     Album updateAlbum(Album album);
 
     void deleteAlbum(long id);

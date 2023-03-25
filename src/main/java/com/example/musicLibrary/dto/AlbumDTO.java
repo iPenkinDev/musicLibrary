@@ -8,7 +8,7 @@ public class AlbumDTO {
     private long id;
     private String title;
     private int year;
-    private Artist artistAlbums;
+    private Artist artist;
 
 
 }

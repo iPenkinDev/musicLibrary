@@ -14,4 +14,8 @@ public interface SongDAO {
     Song updateSong(Song song);
 
     void deleteSong(long id);
+
+    List<Song> getSongsByAlbumId(long albumId);
+
+    Song getSongByAlbumIdAndSongId(long albumId, long songId);
 }
