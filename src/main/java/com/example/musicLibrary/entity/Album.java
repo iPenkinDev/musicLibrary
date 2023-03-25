@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "albums")
 @Data
@@ -26,4 +28,7 @@ public class Album {
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "artist_id", referencedColumnName = "id")
         private Artist artistAlbums;
+
+        @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+        private List<Song> songs;
 }

@@ -60,7 +60,7 @@ public class AlbumDaoImpl implements AlbumDAO {
         TypedQuery<Album> query = entityManager
                 .createQuery("SELECT a FROM Album a WHERE a.artistAlbums.id = :artistId AND a.id = :albumId", Album.class);
         query.setParameter("artistId", artistId);
-        query.setParameter("id", albumId);
+        query.setParameter("albumId", albumId);
         return query.getSingleResult();
     }
 }

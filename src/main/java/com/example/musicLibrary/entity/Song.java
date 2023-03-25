@@ -25,10 +25,14 @@ public class Song {
     @Column(name = "song_year")
     private int year;
 
-    @ManyToMany
-    @JoinTable(
-            name = "song_genre",
-            joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
-    private List<Genre> genres;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "album_id", referencedColumnName = "id")
+    private Album album;
+
+//    @ManyToMany
+//    @JoinTable(
+//            name = "song_genre",
+//            joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+//    private List<Genre> genres;
 }

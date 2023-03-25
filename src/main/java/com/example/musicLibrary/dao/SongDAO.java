@@ -5,13 +5,13 @@ import com.example.musicLibrary.entity.Song;
 import java.util.List;
 
 public interface SongDAO {
-    public Song createSong(Song song);
+    Song createSong(Song song);
 
-    public Song getSongById(long id);
+    Song getSongById(long id);
 
-    public List<Song> getAllSongs();
+    List<Song> getAllSongs();
 
-    public Song updateSong(Song song);
+    Song updateSong(Song song);
 
-    public void deleteSong(long id);
+    void deleteSong(long id);
 }

@@ -48,8 +48,9 @@ public class AlbumController {
     public List<AlbumDTO> getAlbumsByArtistId(@PathVariable(name = "artist_id") long artistId) {
         return albumService.getAlbumsByArtistId(artistId);
     }
-//    @GetMapping("/{id}/album-owner")
-//    public Artist getAlbumOwner(@PathVariable Long id) {
-//        return artistService.getArtistById(id);
-//    }
+
+    @GetMapping("/artist/{artist_id}/album/{album_id}")
+    public AlbumDTO getAlbumByArtistIdAndAlbumId(@PathVariable(name = "artist_id") long artistId, @PathVariable(name = "album_id") long albumId) {
+        return albumService.getAlbumByArtistIdAndAlbumId(artistId, albumId);
+    }
 }
