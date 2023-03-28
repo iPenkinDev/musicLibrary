@@ -29,10 +29,10 @@ public class Song {
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     private Album album;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "song_genre",
-//            joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
-//    private List<Genre> genres;
+    @ManyToMany
+    @JoinTable(
+            name = "song_genre",
+            joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    private List<Genre> genres;
 }

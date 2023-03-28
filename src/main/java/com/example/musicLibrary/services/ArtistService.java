@@ -8,10 +8,14 @@ import java.util.List;
 
 @Service
 public interface ArtistService {
-    public Artist createArtist(Artist artist);
-    public Artist getArtistById(long id);
-    public List<Artist> getAllArtists();
-    public ArtistDTO updateArtist(ArtistDTO artistDTO, long id);
-    public void deleteArtist(long id);
+    Artist createArtist(Artist artist);
+
+    Artist getArtistById(long id);
+
+    List<Artist> getAllArtists();
+
+    ArtistDTO updateArtist(ArtistDTO artistDTO, long id);
+
+    void deleteArtist(long id);
 
 }

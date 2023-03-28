@@ -22,6 +22,6 @@ public class Genre {
     @Column(name = "genre_title")
     private String title;
 
-//    @ManyToMany(mappedBy = "genres")
-//    private List<Song> songs;
+    @ManyToMany(mappedBy = "genres")
+    private List<Song> songs;
 }
