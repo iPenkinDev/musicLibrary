@@ -1,5 +1,6 @@
 package com.example.musicLibrary.dao;
 
+import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface SongDAO {
     List<Song> getSongsByArtistId(long artistId);
 
     Song getSongByArtistIdAndSongId(long artistId, long songId);
+
+    List<Genre> getGenresBySongId(long songId);
 }

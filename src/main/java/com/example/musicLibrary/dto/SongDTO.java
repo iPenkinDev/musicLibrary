@@ -12,4 +12,5 @@ public class SongDTO {
     private String title;
     private int year;
     private Album album;
+    private List<Genre> genres;
 }

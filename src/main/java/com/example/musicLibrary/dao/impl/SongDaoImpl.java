@@ -1,6 +1,7 @@
 package com.example.musicLibrary.dao.impl;
 
 import com.example.musicLibrary.dao.SongDAO;
+import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -79,5 +80,12 @@ public class SongDaoImpl implements SongDAO {
         query.setParameter("artistId", artistId);
         query.setParameter("songId", songId);
         return query.getSingleResult();
+    }
+
+    @Override
+    public List<Genre> getGenresBySongId(long songId) {
+        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g JOIN g.songs s WHERE s.id = :songId", Genre.class);
+        query.setParameter("songId", songId);
+        return query.getResultList();
     }
 }

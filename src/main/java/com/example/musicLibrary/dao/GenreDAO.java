@@ -1,13 +1,23 @@
 package com.example.musicLibrary.dao;
 
 import com.example.musicLibrary.entity.Genre;
+import com.example.musicLibrary.entity.Song;
 
 import java.util.List;
 
 public interface GenreDAO {
-    public Genre createGenre(Genre genre);
-    public Genre getGenreById(long id);
-    public List<Genre> getAllGenres();
-    public void updateGenre(Genre genre, long id);
-    public void deleteGenre(long id);
+    Genre createGenre(Genre genre);
+
+    Genre getGenreById(long id);
+
+    List<Genre> getAllGenres();
+
+    Genre updateGenre(Genre genre);
+
+    void deleteGenre(long id);
+
+    void addGenreToSong(long genreId, long songId);
+
+    List<Song> getSongsByGenreId(long id);
+
 }
