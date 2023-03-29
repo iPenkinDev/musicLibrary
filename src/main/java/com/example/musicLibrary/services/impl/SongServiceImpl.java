@@ -1,7 +1,9 @@
 package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.impl.AlbumDaoImpl;
+import com.example.musicLibrary.dao.impl.GenreDaoImpl;
 import com.example.musicLibrary.dao.impl.SongDaoImpl;
+import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
 import com.example.musicLibrary.entity.Album;
@@ -18,12 +20,14 @@ public class SongServiceImpl implements SongService {
 
     private final AlbumDaoImpl albumDao;
     private final SongDaoImpl songDao;
+    private final GenreDaoImpl genreDao;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public SongServiceImpl(AlbumDaoImpl albumDao, SongDaoImpl songDao, ModelMapper modelMapper) {
+    public SongServiceImpl(AlbumDaoImpl albumDao, SongDaoImpl songDao, GenreDaoImpl genreDao, ModelMapper modelMapper) {
         this.albumDao = albumDao;
         this.songDao = songDao;
+        this.genreDao = genreDao;
         this.modelMapper = modelMapper;
     }
 
@@ -82,6 +86,21 @@ public class SongServiceImpl implements SongService {
     @Override
     public SongDTO getSongByArtistIdAndSongId(long artistId, long songId) {
         return mapToDTO(songDao.getSongByArtistIdAndSongId(artistId, songId));
+    }
+
+    @Override
+    public void addSongToGenre(long songId, long genreId) {
+        songDao.addSongToGenre(songId, genreId);
+    }
+
+    @Override
+    public void removeSongFromGenre(long songId, long genreId) {
+        songDao.removeSongFromGenre(songId, genreId);
+    }
+
+   @Override
+    public List<GenreDTO> getGenresBySongId(long songId) {
+        return null;
     }
 
     private Song mapToEntity(SongDTO songDTO) {

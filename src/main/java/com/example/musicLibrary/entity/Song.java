@@ -29,7 +29,7 @@ public class Song {
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     private Album album;
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "song_genre",
             joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),

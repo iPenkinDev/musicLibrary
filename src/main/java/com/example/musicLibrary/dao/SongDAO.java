@@ -24,5 +24,9 @@ public interface SongDAO {
 
     Song getSongByArtistIdAndSongId(long artistId, long songId);
 
-    List<Genre> getGenresBySongId(long songId);
+    void addSongToGenre(long songId, long genreId);
+
+    void removeSongFromGenre(long songId, long genreId);
+
+   List<Song> getSongsByGenreId(long genreId);
 }

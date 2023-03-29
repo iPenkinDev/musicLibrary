@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@SuppressWarnings("JpaQlInspection")
 @Repository
 @Transactional(readOnly = true)
 public class GenreDaoImpl implements GenreDAO {
@@ -67,9 +68,19 @@ public class GenreDaoImpl implements GenreDAO {
     }
 
     @Override
-    public List<Song> getSongsByGenreId(long genreId) {
-        TypedQuery<Song> query = entityManager.createQuery("SELECT s FROM Song s JOIN s.genres g WHERE g.id = :id", Song.class);
-        query.setParameter("id", genreId);
+    public void removeGenreFromSong(long genreId, long songId) {
+        Genre genre = getGenreById(genreId);
+        Song song = entityManager.find(Song.class, songId);
+        song.getGenres().remove(genre);
+        genre.getSongs().remove(song);
+        entityManager.merge(song);
+        entityManager.merge(genre);
+    }
+
+    @Override
+    public List<Genre> getGenresBySongId(long songId) {
+        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM song_genre g WHERE g.song_id = :songId", Genre.class);
+        query.setParameter("songId", songId);
         return query.getResultList();
     }
 }

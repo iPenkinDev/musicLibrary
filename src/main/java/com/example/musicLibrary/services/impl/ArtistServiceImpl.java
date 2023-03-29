@@ -2,9 +2,9 @@ package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
 import com.example.musicLibrary.dto.ArtistDTO;
+import com.example.musicLibrary.dto.forms.ArtistForm;
 import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.ArtistService;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,35 +24,32 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    @Transactional
-    public Artist createArtist(Artist artist) {
-        return artistDao.createArtist(artist);
+    public ArtistDTO createArtist(ArtistDTO artistDTO) {
+        return mapToDTO(artistDao.createArtist(mapToEntity(artistDTO)));
     }
 
     @Override
-    public Artist getArtistById(long id) {
-        return artistDao.getArtistById(id);
+    public ArtistDTO getArtistById(long id) {
+        return mapToDTO(artistDao.getArtistById(id));
     }
 
     @Override
-    public List<Artist> getAllArtists() {
-        return artistDao.getAllArtists();
+    public List<ArtistDTO> getAllArtists() {
+        return artistDao.getAllArtists().stream().map(this::mapToDTO).toList();
     }
 
     @Override
-    @Transactional
-    public ArtistDTO updateArtist(ArtistDTO artistDTO, long id) {
-        Artist artistUpdate = artistDao.getArtistById(id);
-        artistUpdate.setName(artistDTO.getName());
-        artistUpdate.setCountry(artistDTO.getCountry());
-        artistUpdate.setDateOfBirth(artistDTO.getDateOfBirth());
+    public ArtistDTO updateArtist(ArtistForm artistForm) {
+        Artist artistUpdate = artistDao.getArtistById(artistForm.getId());
+        artistUpdate.setName(artistForm.getName());
+        artistUpdate.setCountry(artistForm.getCountry());
+        artistUpdate.setDateOfBirth(artistUpdate.getDateOfBirth());
 
         Artist newArtist = artistDao.updateArtist(artistUpdate);
         return mapToDTO(newArtist);
     }
 
     @Override
-    @Transactional
     public void deleteArtist(long id) {
         artistDao.deleteArtist(id);
     }

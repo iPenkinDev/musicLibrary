@@ -3,6 +3,7 @@ package com.example.musicLibrary.dao;
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface GenreDAO {
@@ -18,6 +19,7 @@ public interface GenreDAO {
 
     void addGenreToSong(long genreId, long songId);
 
-    List<Song> getSongsByGenreId(long id);
+    void removeGenreFromSong(long genreId, long songId);
 
+    List<Genre> getGenresBySongId(long songId);
 }
