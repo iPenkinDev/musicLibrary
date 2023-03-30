@@ -1,6 +1,8 @@
 package com.example.musicLibrary.controllers;
 
 import com.example.musicLibrary.dto.ArtistDTO;
+import com.example.musicLibrary.dto.forms.AlbumForm;
+import com.example.musicLibrary.dto.forms.ArtistForm;
 import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.impl.ArtistServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import java.util.List;
 @RequestMapping("/artists")
 public class ArtistController {
 
-    private ArtistServiceImpl artistService;
+    private final ArtistServiceImpl artistService;
 
     @Autowired
     public ArtistController(ArtistServiceImpl artistService) {
@@ -22,23 +24,24 @@ public class ArtistController {
     }
 
     @PostMapping("/create")
-    public Artist createArtist(@RequestBody Artist artist) {
-        return artistService.createArtist(artist);
+    public ResponseEntity<ArtistDTO> createArtist(@RequestBody ArtistDTO artistDTO) {
+        ArtistDTO artistCreateDTO = artistService.createArtist(artistDTO);
+        return new ResponseEntity<>(artistCreateDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public Artist getArtistById(@PathVariable long id) {
+    public ArtistDTO getArtistById(@PathVariable long id) {
         return artistService.getArtistById(id);
     }
 
     @GetMapping("/all")
-    public List<Artist> getAllArtists() {
+    public List<ArtistDTO> getAllArtists() {
         return artistService.getAllArtists();
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistDTO artistDTO, @PathVariable(name = "id") long id) {
-        ArtistDTO response = artistService.updateArtist(artistDTO, id);
+    @PutMapping("/update")
+    public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistForm artistForm) {
+        ArtistDTO response = artistService.updateArtist(artistForm);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

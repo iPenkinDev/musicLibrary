@@ -3,7 +3,6 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.impl.AlbumDaoImpl;
 import com.example.musicLibrary.dao.impl.GenreDaoImpl;
 import com.example.musicLibrary.dao.impl.SongDaoImpl;
-import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
 import com.example.musicLibrary.entity.Album;
@@ -98,9 +97,9 @@ public class SongServiceImpl implements SongService {
         songDao.removeSongFromGenre(songId, genreId);
     }
 
-   @Override
-    public List<GenreDTO> getGenresBySongId(long songId) {
-        return null;
+    @Override
+    public List<Song> getSongsByGenreId(long genreId) {
+        return songDao.getSongsByGenreId(genreId);
     }
 
     private Song mapToEntity(SongDTO songDTO) {

@@ -33,5 +33,5 @@ public interface SongService {
 
     void removeSongFromGenre(long songId, long genreId);
 
-    List<GenreDTO> getGenresBySongId(long songId);
+    List<Song> getSongsByGenreId(long genreId);
 }

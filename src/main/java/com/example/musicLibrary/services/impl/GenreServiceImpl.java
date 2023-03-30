@@ -3,7 +3,6 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.impl.GenreDaoImpl;
 import com.example.musicLibrary.dao.impl.SongDaoImpl;
 import com.example.musicLibrary.dto.GenreDTO;
-import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.GenreForm;
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
@@ -12,9 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class GenreServiceImpl implements GenreService {
@@ -31,7 +29,10 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDTO createGenre(GenreDTO genreDTO) {
+    public GenreDTO createGenre(GenreDTO genreDTO, long songId) {
+        List<Song> songList = new ArrayList<>();
+        songList.add(songDao.getSongById(songId));
+        genreDTO.setSongs(songList);
         return mapToDTO(genreDao.createGenre(mapToEntity(genreDTO)));
     }
 
@@ -63,18 +64,17 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void addGenreToSong(long genreId, long songId) {
+    public void addSongToGenre(long genreId, long songId) {
         Genre genre = genreDao.getGenreById(genreId);
         Song song = songDao.getSongById(songId);
         List<Song> songs = genre.getSongs();
         songs.add(song);
         genre.setSongs(songs);
         genreDao.updateGenre(genre);
-
     }
 
     @Override
-    public void removeGenreFromSong(long genreId, long songId) {
+    public void removeSongToGenre(long genreId, long songId) {
         Genre genre = genreDao.getGenreById(genreId);
         Song song = songDao.getSongById(songId);
         List<Song> songs = genre.getSongs();
@@ -84,8 +84,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<SongDTO> getSongsByGenreId(long id) {
-        return null;
+    public List<GenreDTO> getGenresBySongId(long id) {
+        return genreDao.getGenresBySongId(id).stream().map(this::mapToDTO).toList();
     }
 
     private Genre mapToEntity(GenreDTO genreDTO) {

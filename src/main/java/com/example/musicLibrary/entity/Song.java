@@ -1,17 +1,26 @@
 package com.example.musicLibrary.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Table(name = "songs")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Song {
 
     @Id
@@ -29,10 +38,8 @@ public class Song {
     @JoinColumn(name = "album_id", referencedColumnName = "id")
     private Album album;
 
-    @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "song_genre",
-            joinColumns = @JoinColumn(name = "song_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "songs")
+    @JsonIgnore
     private List<Genre> genres;
+
 }

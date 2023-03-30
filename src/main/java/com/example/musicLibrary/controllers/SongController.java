@@ -2,7 +2,7 @@ package com.example.musicLibrary.controllers;
 
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
-import com.example.musicLibrary.services.SongService;
+import com.example.musicLibrary.entity.Song;
 import com.example.musicLibrary.services.impl.SongServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,5 +67,20 @@ public class SongController {
     @GetMapping("/artist/{artist_id}/song/{song_id}")
     public SongDTO getSongByArtistIdAndSongId(@PathVariable(name = "artist_id") long artistId, @PathVariable(name = "song_id") long songId) {
         return songService.getSongByArtistIdAndSongId(artistId, songId);
+    }
+
+    @GetMapping("/genre/{genre_id}")
+    public List<Song> getSongsByGenreId(@PathVariable(name = "genre_id") long genreId) {
+        return songService.getSongsByGenreId(genreId);
+    }
+
+    @PostMapping("/genre/{genre_id}/song/{song_id}")
+    public void addSongToGenre(@PathVariable(name = "genre_id") long genreId, @PathVariable(name = "song_id") long songId) {
+        songService.addSongToGenre(songId, genreId);
+    }
+
+    @DeleteMapping("/genre/{genre_id}/song/{song_id}")
+    public void removeSongFromGenre(@PathVariable(name = "genre_id") long genreId, @PathVariable(name = "song_id") long songId) {
+        songService.removeSongFromGenre(songId, genreId);
     }
 }

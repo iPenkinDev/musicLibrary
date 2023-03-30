@@ -4,6 +4,7 @@ import com.example.musicLibrary.dao.GenreDAO;
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class GenreDaoImpl implements GenreDAO {
 
+    @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
@@ -37,7 +39,7 @@ public class GenreDaoImpl implements GenreDAO {
 
     @Override
     public List<Genre> getAllGenres() {
-        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g", Genre.class);
+        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM genres g", Genre.class);
         return query.getResultList();
     }
 
@@ -58,7 +60,7 @@ public class GenreDaoImpl implements GenreDAO {
     }
 
     @Override
-    public void addGenreToSong(long genreId, long songId) {
+    public void addSongToGenre(long genreId, long songId) {
         Genre genre = getGenreById(genreId);
         Song song = entityManager.find(Song.class, songId);
         song.getGenres().add(genre);
@@ -68,7 +70,7 @@ public class GenreDaoImpl implements GenreDAO {
     }
 
     @Override
-    public void removeGenreFromSong(long genreId, long songId) {
+    public void removeSongToGenre(long genreId, long songId) {
         Genre genre = getGenreById(genreId);
         Song song = entityManager.find(Song.class, songId);
         song.getGenres().remove(genre);
@@ -78,9 +80,9 @@ public class GenreDaoImpl implements GenreDAO {
     }
 
     @Override
-    public List<Genre> getGenresBySongId(long songId) {
-        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM song_genre g WHERE g.song_id = :songId", Genre.class);
-        query.setParameter("songId", songId);
+    public List<Genre> getGenresBySongId(long genreId) {
+        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM song_genre g WHERE g.song.id = :genreId", Genre.class);
+        query.setParameter("genreId", genreId);
         return query.getResultList();
     }
 }
