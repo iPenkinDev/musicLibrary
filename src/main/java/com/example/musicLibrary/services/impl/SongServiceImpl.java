@@ -3,9 +3,11 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.impl.AlbumDaoImpl;
 import com.example.musicLibrary.dao.impl.GenreDaoImpl;
 import com.example.musicLibrary.dao.impl.SongDaoImpl;
+import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
 import com.example.musicLibrary.entity.Album;
+import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 import com.example.musicLibrary.services.SongService;
 import org.modelmapper.ModelMapper;
@@ -88,28 +90,31 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public void addSongToGenre(long songId, long genreId) {
-        songDao.addSongToGenre(songId, genreId);
+    public void deleteSongByGenreId(long genreId) {
+        songDao.deleteSongByGenreId(genreId);
     }
 
     @Override
-    public void removeSongFromGenre(long songId, long genreId) {
-        songDao.removeSongFromGenre(songId, genreId);
+    public List<SongDTO> getAllSongsByGenreId(long genreId) {
+        List<Song> songList = songDao.getAllSongsByGenreId(genreId);
+        return songList.stream().map(this::mapToDTO).toList();
     }
 
     @Override
-    public List<Song> getSongsByGenreId(long genreId) {
-        return songDao.getSongsByGenreId(genreId);
+    public List<GenreDTO> getAllGenresBySongId(long songId) {
+        List<Genre> genreList = genreDao.getAllGenresBySongId(songId);
+        return genreList.stream().map(this::mapToDTO).toList();
     }
 
     private Song mapToEntity(SongDTO songDTO) {
         return modelMapper.map(songDTO, Song.class);
     }
 
-    private SongDTO mapToDTO(Song newSong) {
-        SongDTO dto = new SongDTO();
+    private GenreDTO mapToDTO(Genre genre) {
+        return modelMapper.map(genre, GenreDTO.class);
+    }
 
-        dto.setId(newSong.getId());
+    private SongDTO mapToDTO(Song newSong) {
         return modelMapper.map(newSong, SongDTO.class);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.musicLibrary.controllers;
 
 import com.example.musicLibrary.dto.GenreDTO;
+import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.GenreForm;
 import com.example.musicLibrary.services.impl.GenreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,20 +49,14 @@ public class GenreController {
         genreService.deleteGenre(id);
     }
 
-    @PostMapping("/add_song")
-    public void addSongToGenre(@RequestParam(name = "genre_id") long genreId, @RequestParam(name = "song_id") long songId) {
-        genreService.addSongToGenre(genreId, songId);
+    @GetMapping("/all/{songId}")
+    public List<GenreDTO> getAllGenresBySongId(@PathVariable long songId) {
+        return genreService.getAllGenresBySongId(songId);
     }
 
-    @PostMapping("/remove_song")
-    public void removeSongToGenre(@RequestParam(name = "genre_id") long genreId, @RequestParam(name = "song_id") long songId) {
-        genreService.removeSongToGenre(genreId, songId);
-    }
-
-    @GetMapping("/song/{id}")
-    public ResponseEntity<List<GenreDTO>> getGenresBySongId(@PathVariable(name = "id") long id) {
-        List<GenreDTO> genreDTOList = genreService.getGenresBySongId(id);
-        return ResponseEntity.ok(genreDTOList);
+    @GetMapping("/all/songs/{genreId}")
+    public List<SongDTO> getAllSongsByGenreId(@PathVariable long genreId) {
+        return genreService.getAllSongsByGenreId(genreId);
     }
 
 }

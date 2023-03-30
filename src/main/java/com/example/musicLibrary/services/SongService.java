@@ -29,9 +29,9 @@ public interface SongService {
 
     SongDTO getSongByArtistIdAndSongId(long artistId, long songId);
 
-    void addSongToGenre(long songId, long genreId);
+    void deleteSongByGenreId(long genreId);
 
-    void removeSongFromGenre(long songId, long genreId);
+    List<SongDTO> getAllSongsByGenreId(long genreId);
 
-    List<Song> getSongsByGenreId(long genreId);
+    List<GenreDTO> getAllGenresBySongId(long songId);
 }

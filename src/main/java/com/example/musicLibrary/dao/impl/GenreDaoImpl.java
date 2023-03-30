@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @SuppressWarnings("JpaQlInspection")
 @Repository
 @Transactional(readOnly = true)
@@ -60,29 +61,25 @@ public class GenreDaoImpl implements GenreDAO {
     }
 
     @Override
-    public void addSongToGenre(long genreId, long songId) {
-        Genre genre = getGenreById(genreId);
+    @Transactional
+    public void deleteGenreBySongId(long songId) {
         Song song = entityManager.find(Song.class, songId);
-        song.getGenres().add(genre);
-        genre.getSongs().add(song);
-        entityManager.merge(song);
-        entityManager.merge(genre);
+        List<Genre> genres = song.getGenres();
+        for (Genre genre : genres) {
+            genre.getSongs().remove(song);
+        }
     }
 
     @Override
-    public void removeSongToGenre(long genreId, long songId) {
-        Genre genre = getGenreById(genreId);
+    public List<Genre> getAllGenresBySongId(long songId) {
         Song song = entityManager.find(Song.class, songId);
-        song.getGenres().remove(genre);
-        genre.getSongs().remove(song);
-        entityManager.merge(song);
-        entityManager.merge(genre);
+        return song.getGenres();
     }
 
     @Override
-    public List<Genre> getGenresBySongId(long genreId) {
-        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM song_genre g WHERE g.song.id = :genreId", Genre.class);
-        query.setParameter("genreId", genreId);
-        return query.getResultList();
+    public List<Song> getAllSongsByGenreId(long genreId) {
+        Genre genre = entityManager.find(Genre.class, genreId);
+        System.out.println("Get songs: " + genre.getSongs());
+        return genre.getSongs();
     }
 }

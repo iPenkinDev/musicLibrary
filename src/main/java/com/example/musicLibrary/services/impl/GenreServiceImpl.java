@@ -3,6 +3,7 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.impl.GenreDaoImpl;
 import com.example.musicLibrary.dao.impl.SongDaoImpl;
 import com.example.musicLibrary.dto.GenreDTO;
+import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.GenreForm;
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
@@ -64,38 +65,29 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void addSongToGenre(long genreId, long songId) {
-        Genre genre = genreDao.getGenreById(genreId);
-        Song song = songDao.getSongById(songId);
-        List<Song> songs = genre.getSongs();
-        songs.add(song);
-        genre.setSongs(songs);
-        genreDao.updateGenre(genre);
+    public void deleteGenreBySongId(long id) {
+        genreDao.deleteGenreBySongId(id);
     }
 
     @Override
-    public void removeSongToGenre(long genreId, long songId) {
-        Genre genre = genreDao.getGenreById(genreId);
-        Song song = songDao.getSongById(songId);
-        List<Song> songs = genre.getSongs();
-        songs.remove(song);
-        genre.setSongs(songs);
-        genreDao.updateGenre(genre);
+    public List<GenreDTO> getAllGenresBySongId(long songId) {
+        return genreDao.getAllGenresBySongId(songId).stream().map(this::mapToDTO).toList();
     }
 
     @Override
-    public List<GenreDTO> getGenresBySongId(long id) {
-        return genreDao.getGenresBySongId(id).stream().map(this::mapToDTO).toList();
+    public List<SongDTO> getAllSongsByGenreId(long genreId) {
+        return genreDao.getAllSongsByGenreId(genreId).stream().map(this::mapToDTO).toList();
     }
 
     private Genre mapToEntity(GenreDTO genreDTO) {
         return modelMapper.map(genreDTO, Genre.class);
     }
 
-    private GenreDTO mapToDTO(Genre newGenre) {
-        GenreDTO dto = new GenreDTO();
+    private SongDTO mapToDTO(Song newSong) {
+        return modelMapper.map(newSong, SongDTO.class);
+    }
 
-        dto.setId(newGenre.getId());
+    private GenreDTO mapToDTO(Genre newGenre) {
         return modelMapper.map(newGenre, GenreDTO.class);
     }
 }

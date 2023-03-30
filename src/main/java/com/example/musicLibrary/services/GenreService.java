@@ -1,6 +1,7 @@
 package com.example.musicLibrary.services;
 
 import com.example.musicLibrary.dto.GenreDTO;
+import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.GenreForm;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,9 @@ public interface GenreService {
 
     void deleteGenre(long id);
 
-    void addSongToGenre(long genreId, long songId);
+    void deleteGenreBySongId(long songId);
 
-    void removeSongToGenre(long genreId, long songId);
+    List<GenreDTO> getAllGenresBySongId(long songId);
 
-    List<GenreDTO> getGenresBySongId(long id);
+    List<SongDTO> getAllSongsByGenreId(long genreId);
 }
