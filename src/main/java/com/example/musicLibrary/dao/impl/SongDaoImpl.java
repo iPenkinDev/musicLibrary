@@ -99,9 +99,9 @@ public class SongDaoImpl implements SongDAO {
     }
 
     @Override
-    public List<Genre> getAllGenresBySongId(long songId) {
-        Song song = entityManager.find(Song.class, songId);
-        return song.getGenres();
+    public Song findSongByTitle(String title) {
+        TypedQuery<Song> query = entityManager.createQuery("SELECT s FROM Song s WHERE s.title = :title", Song.class);
+        query.setParameter("title", title);
+        return query.getSingleResult();
     }
-
 }

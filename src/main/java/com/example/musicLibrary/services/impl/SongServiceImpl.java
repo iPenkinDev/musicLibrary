@@ -101,17 +101,16 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public List<GenreDTO> getAllGenresBySongId(long songId) {
-        List<Genre> genreList = genreDao.getAllGenresBySongId(songId);
-        return genreList.stream().map(this::mapToDTO).toList();
+    public SongDTO findSongByTitle(String title) {
+        return mapToDTO(songDao.findSongByTitle(title));
     }
 
     private Song mapToEntity(SongDTO songDTO) {
         return modelMapper.map(songDTO, Song.class);
     }
 
-    private GenreDTO mapToDTO(Genre genre) {
-        return modelMapper.map(genre, GenreDTO.class);
+    private GenreDTO mapToDTO(Genre newGenre) {
+        return modelMapper.map(newGenre, GenreDTO.class);
     }
 
     private SongDTO mapToDTO(Song newSong) {

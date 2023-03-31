@@ -59,4 +59,9 @@ public class GenreController {
         return genreService.getAllSongsByGenreId(genreId);
     }
 
+    @GetMapping("/find/{title}")
+    public GenreDTO findGenreByTitle(@PathVariable String title) {
+        return genreService.findGenreByTitle(title);
+    }
+
 }

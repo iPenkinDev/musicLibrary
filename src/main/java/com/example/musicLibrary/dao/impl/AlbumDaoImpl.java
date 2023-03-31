@@ -69,4 +69,11 @@ public class AlbumDaoImpl implements AlbumDAO {
         query.setParameter("albumId", albumId);
         return query.getSingleResult();
     }
+
+    @Override
+    public Album findAlbumByTitle(String title) {
+        TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a WHERE a.title = :title", Album.class);
+        query.setParameter("title", title);
+        return query.getSingleResult();
+    }
 }

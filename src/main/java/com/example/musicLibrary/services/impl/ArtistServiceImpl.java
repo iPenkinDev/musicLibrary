@@ -54,6 +54,11 @@ public class ArtistServiceImpl implements ArtistService {
         artistDao.deleteArtist(id);
     }
 
+    @Override
+    public ArtistDTO findArtistByName(String name) {
+        return mapToDTO(artistDao.findArtistByName(name));
+    }
+
     private Artist mapToEntity(ArtistDTO artistDTO) {
         return modelMapper.map(artistDTO, Artist.class);
     }

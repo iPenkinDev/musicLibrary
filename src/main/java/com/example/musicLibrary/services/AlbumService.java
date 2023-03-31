@@ -20,4 +20,6 @@ public interface AlbumService {
     List<AlbumDTO> getAlbumsByArtistId(long artistId);
 
     AlbumDTO getAlbumByArtistIdAndAlbumId(long artistId, long albumId);
+
+    AlbumDTO findAlbumByTitle(String title);
 }

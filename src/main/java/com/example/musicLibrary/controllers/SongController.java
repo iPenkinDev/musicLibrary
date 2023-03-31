@@ -3,8 +3,6 @@ package com.example.musicLibrary.controllers;
 import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
-import com.example.musicLibrary.entity.Genre;
-import com.example.musicLibrary.entity.Song;
 import com.example.musicLibrary.services.impl.SongServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SuppressWarnings("MVCPathVariableInspection")
 @RestController
 @RequestMapping("/songs")
 public class SongController {
@@ -71,13 +70,18 @@ public class SongController {
         return songService.getSongByArtistIdAndSongId(artistId, songId);
     }
 
+    @DeleteMapping("/delete/{genre_id}")
+    public void deleteSongByGenreId(@PathVariable(name = "genre_id") long genreId) {
+        songService.deleteSongByGenreId(genreId);
+    }
+
     @GetMapping("/genre/{genre_id}")
-    public List<SongDTO> getSongsByGenreId(@PathVariable(name = "genre_id") long genreId) {
+    public List<SongDTO> getAllSongsByGenreId(@PathVariable(name = "genre_id") long genreId) {
         return songService.getAllSongsByGenreId(genreId);
     }
 
-    @GetMapping("/all/genres/{songId}")
-    public List<GenreDTO> getAllGenresBySongId(@PathVariable(name = "song_id") long songId) {
-        return songService.getAllGenresBySongId(songId);
+    @GetMapping("/find/{title}")
+    public SongDTO findSongByTitle(@PathVariable(name = "title") String title) {
+        return songService.findSongByTitle(title);
     }
 }

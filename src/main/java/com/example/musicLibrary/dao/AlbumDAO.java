@@ -18,4 +18,6 @@ public interface AlbumDAO {
     List<Album> getAlbumsByArtistId(long artistId);
 
     Album getAlbumByArtistIdAndAlbumId(long artistId, long albumId);
+
+    Album findAlbumByTitle(String title);
 }

@@ -79,6 +79,11 @@ public class GenreServiceImpl implements GenreService {
         return genreDao.getAllSongsByGenreId(genreId).stream().map(this::mapToDTO).toList();
     }
 
+    @Override
+    public GenreDTO findGenreByTitle(String title) {
+        return mapToDTO(genreDao.findGenreByTitle(title));
+    }
+
     private Genre mapToEntity(GenreDTO genreDTO) {
         return modelMapper.map(genreDTO, Genre.class);
     }

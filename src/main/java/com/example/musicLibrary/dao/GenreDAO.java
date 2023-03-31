@@ -21,4 +21,6 @@ public interface GenreDAO {
     List<Genre> getAllGenresBySongId(long songId);
 
     List<Song> getAllSongsByGenreId(long genreId);
+
+    Genre findGenreByTitle(String title);
 }

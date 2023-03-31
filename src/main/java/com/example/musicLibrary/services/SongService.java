@@ -3,8 +3,6 @@ package com.example.musicLibrary.services;
 import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
-import com.example.musicLibrary.entity.Genre;
-import com.example.musicLibrary.entity.Song;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,5 +31,5 @@ public interface SongService {
 
     List<SongDTO> getAllSongsByGenreId(long genreId);
 
-    List<GenreDTO> getAllGenresBySongId(long songId);
+    SongDTO findSongByTitle(String title);
 }

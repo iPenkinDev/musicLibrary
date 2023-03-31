@@ -28,7 +28,5 @@ public interface SongDAO {
 
     List<Song> getAllSongsByGenreId(long genreId);
 
-    List<Genre> getAllGenresBySongId(long songId);
-
-
+    Song findSongByTitle(String title);
 }

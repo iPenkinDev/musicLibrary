@@ -15,4 +15,7 @@ public interface ArtistDAO {
 
     void deleteArtist(long id);
 
+    Artist findArtistByName(String name);
+
+
 }

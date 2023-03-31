@@ -49,4 +49,9 @@ public class ArtistController {
     public void deleteArtist(@PathVariable(name = "id") long id) {
         artistService.deleteArtist(id);
     }
+
+    @GetMapping("/find/{name}")
+    public ArtistDTO findArtistByName(@PathVariable String name) {
+        return artistService.findArtistByName(name);
+    }
 }

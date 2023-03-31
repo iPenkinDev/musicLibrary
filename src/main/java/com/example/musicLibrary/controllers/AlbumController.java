@@ -58,4 +58,9 @@ public class AlbumController {
     public AlbumDTO getAlbumByArtistIdAndAlbumId(@PathVariable(name = "artist_id") long artistId, @PathVariable(name = "album_id") long albumId) {
         return albumService.getAlbumByArtistIdAndAlbumId(artistId, albumId);
     }
+
+    @GetMapping("/find/{title}")
+    public AlbumDTO findAlbumByTitle(@PathVariable String title) {
+        return albumService.findAlbumByTitle(title);
+    }
 }

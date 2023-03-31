@@ -56,4 +56,10 @@ public class ArtistDaoImpl implements ArtistDAO {
         System.out.println("Artist with id " + id + " was deleted");
     }
 
+    @Override
+    public Artist findArtistByName(String name) {
+        TypedQuery<Artist> query = entityManager.createQuery("SELECT a FROM Artist a WHERE a.name = :name", Artist.class);
+        query.setParameter("name", name);
+        return query.getSingleResult();
+    }
 }

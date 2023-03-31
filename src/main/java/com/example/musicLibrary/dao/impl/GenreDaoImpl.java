@@ -82,4 +82,11 @@ public class GenreDaoImpl implements GenreDAO {
         System.out.println("Get songs: " + genre.getSongs());
         return genre.getSongs();
     }
+
+    @Override
+    public Genre findGenreByTitle(String title) {
+        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM genres g WHERE g.title = :title", Genre.class);
+        query.setParameter("title", title);
+        return query.getSingleResult();
+    }
 }

@@ -24,4 +24,6 @@ public interface GenreService {
     List<GenreDTO> getAllGenresBySongId(long songId);
 
     List<SongDTO> getAllSongsByGenreId(long genreId);
+
+    GenreDTO findGenreByTitle(String title);
 }

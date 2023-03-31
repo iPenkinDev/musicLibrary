@@ -1,5 +1,6 @@
 package com.example.musicLibrary.services.impl;
 
+import com.example.musicLibrary.dao.AlbumDAO;
 import com.example.musicLibrary.dao.impl.AlbumDaoImpl;
 import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
 import com.example.musicLibrary.dto.AlbumDTO;
@@ -72,6 +73,11 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public AlbumDTO getAlbumByArtistIdAndAlbumId(long artistId, long albumId) {
         return mapToDTO(albumDao.getAlbumByArtistIdAndAlbumId(artistId, albumId));
+    }
+
+    @Override
+    public AlbumDTO findAlbumByTitle(String title) {
+        return mapToDTO(albumDao.findAlbumByTitle(title));
     }
 
     private Album mapToEntity(AlbumDTO albumDTO) {
