@@ -1,12 +1,11 @@
 package com.example.musicLibrary.services.impl;
 
-import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
+import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.dto.ArtistDTO;
 import com.example.musicLibrary.dto.forms.ArtistForm;
 import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.ArtistService;
 import com.example.musicLibrary.util.ArtistMapper;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +14,11 @@ import java.util.List;
 @Service
 public class ArtistServiceImpl implements ArtistService {
 
-    private final ArtistDaoImpl artistDao;
+    private final ArtistDAO artistDao;
     private final ArtistMapper artistMapper;
 
     @Autowired
-    public ArtistServiceImpl(ArtistDaoImpl artistDao, ArtistMapper artistMapper) {
+    public ArtistServiceImpl(ArtistDAO artistDao, ArtistMapper artistMapper) {
         this.artistDao = artistDao;
         this.artistMapper = artistMapper;
     }

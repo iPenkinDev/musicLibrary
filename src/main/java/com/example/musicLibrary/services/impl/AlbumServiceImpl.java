@@ -1,8 +1,7 @@
 package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.AlbumDAO;
-import com.example.musicLibrary.dao.impl.AlbumDaoImpl;
-import com.example.musicLibrary.dao.impl.ArtistDaoImpl;
+import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.dto.AlbumDTO;
 import com.example.musicLibrary.dto.forms.AlbumForm;
 import com.example.musicLibrary.entity.Album;
@@ -10,22 +9,20 @@ import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.AlbumService;
 import com.example.musicLibrary.util.AlbumMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AlbumServiceImpl implements AlbumService {
 
-    private final AlbumDaoImpl albumDao;
-    private final ArtistDaoImpl artistDao;
+    private final AlbumDAO albumDao;
+    private final ArtistDAO artistDao;
     private final AlbumMapper albumMapper;
 
     @Autowired
-    public AlbumServiceImpl(AlbumDaoImpl albumDao, AlbumMapper albumMapper, ArtistDaoImpl artistDao) {
+    public AlbumServiceImpl(AlbumDAO albumDao, AlbumMapper albumMapper, ArtistDAO artistDao) {
         this.albumDao = albumDao;
         this.artistDao = artistDao;
         this.albumMapper = albumMapper;

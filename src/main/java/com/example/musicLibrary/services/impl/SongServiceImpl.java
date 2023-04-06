@@ -1,7 +1,7 @@
 package com.example.musicLibrary.services.impl;
 
-import com.example.musicLibrary.dao.impl.AlbumDaoImpl;
-import com.example.musicLibrary.dao.impl.SongDaoImpl;
+import com.example.musicLibrary.dao.AlbumDAO;
+import com.example.musicLibrary.dao.SongDAO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
 import com.example.musicLibrary.entity.Album;
@@ -16,13 +16,13 @@ import java.util.List;
 @Service
 public class SongServiceImpl implements SongService {
 
-    private final AlbumDaoImpl albumDao;
-    private final SongDaoImpl songDao;
+    private final AlbumDAO albumDao;
+    private final SongDAO songDao;
     private final SongMapper songMapper;
 
 
     @Autowired
-    public SongServiceImpl(AlbumDaoImpl albumDao, SongDaoImpl songDao, SongMapper songMapper) {
+    public SongServiceImpl(AlbumDAO albumDao, SongDAO songDao, SongMapper songMapper) {
         this.albumDao = albumDao;
         this.songDao = songDao;
         this.songMapper = songMapper;

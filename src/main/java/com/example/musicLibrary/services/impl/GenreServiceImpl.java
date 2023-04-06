@@ -1,7 +1,7 @@
 package com.example.musicLibrary.services.impl;
 
-import com.example.musicLibrary.dao.impl.GenreDaoImpl;
-import com.example.musicLibrary.dao.impl.SongDaoImpl;
+import com.example.musicLibrary.dao.GenreDAO;
+import com.example.musicLibrary.dao.SongDAO;
 import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.GenreForm;
@@ -9,7 +9,6 @@ import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 import com.example.musicLibrary.services.GenreService;
 import com.example.musicLibrary.util.GenreMapper;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +18,12 @@ import java.util.List;
 @Service
 public class GenreServiceImpl implements GenreService {
 
-    private final GenreDaoImpl genreDao;
-    private final SongDaoImpl songDao;
+    private final GenreDAO genreDao;
+    private final SongDAO songDao;
     private final GenreMapper genreMapper;
 
     @Autowired
-    public GenreServiceImpl(GenreDaoImpl genreDao, GenreMapper genreMapper, SongDaoImpl songDao) {
+    public GenreServiceImpl(GenreDAO genreDao, GenreMapper genreMapper, SongDAO songDao) {
         this.genreDao = genreDao;
         this.songDao = songDao;
         this.genreMapper = genreMapper;
