@@ -25,7 +25,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public ArtistDTO createArtist(ArtistDTO artistDTO) {
-        return mapToDTO(artistDao.createArtist(mapToEntity(artistDTO)));
+       return mapToDTO(artistDao.createArtist(mapToEntity(artistDTO)));
     }
 
     @Override

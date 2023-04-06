@@ -2,7 +2,6 @@ package com.example.musicLibrary.controllers;
 
 import com.example.musicLibrary.dto.AlbumDTO;
 import com.example.musicLibrary.dto.forms.AlbumForm;
-import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.impl.AlbumServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +28,15 @@ public class AlbumController {
     }
 
     @GetMapping("/{id}")
-    public AlbumDTO getAlbumById(@PathVariable long id) {
-        return albumService.getAlbumById(id);
+    public ResponseEntity<AlbumDTO> getAlbumById(@PathVariable long id) {
+        AlbumDTO albumDTO = albumService.getAlbumById(id);
+        return new ResponseEntity<>(albumDTO, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public List<AlbumDTO> getAllAlbums() {
-        return albumService.getAllAlbums();
+    public ResponseEntity<List<AlbumDTO>> getAllAlbums() {
+        List<AlbumDTO> albumDTOList = albumService.getAllAlbums();
+        return new ResponseEntity<>(albumDTOList, HttpStatus.OK);
     }
 
     @PutMapping("/update")
@@ -45,22 +46,26 @@ public class AlbumController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAlbum(@PathVariable(name = "id") long id) {
+    public ResponseEntity<Void> deleteAlbum(@PathVariable(name = "id") long id) {
         albumService.deleteAlbum(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/artist/{artist_id}")
-    public List<AlbumDTO> getAlbumsByArtistId(@PathVariable(name = "artist_id") long artistId) {
-        return albumService.getAlbumsByArtistId(artistId);
+    public ResponseEntity<List<AlbumDTO>> getAlbumsByArtistId(@PathVariable(name = "artist_id") long artistId) {
+        List<AlbumDTO> albumDTOList = albumService.getAlbumsByArtistId(artistId);
+        return new ResponseEntity<>(albumDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/artist/{artist_id}/album/{album_id}")
-    public AlbumDTO getAlbumByArtistIdAndAlbumId(@PathVariable(name = "artist_id") long artistId, @PathVariable(name = "album_id") long albumId) {
-        return albumService.getAlbumByArtistIdAndAlbumId(artistId, albumId);
+    public ResponseEntity<AlbumDTO> getAlbumByArtistIdAndAlbumId(@PathVariable(name = "artist_id") long artistId, @PathVariable(name = "album_id") long albumId) {
+        AlbumDTO albumDTO = albumService.getAlbumByArtistIdAndAlbumId(artistId, albumId);
+        return new ResponseEntity<>(albumDTO, HttpStatus.OK);
     }
 
     @GetMapping("/find/{title}")
-    public AlbumDTO findAlbumByTitle(@PathVariable String title) {
-        return albumService.findAlbumByTitle(title);
+    public ResponseEntity<AlbumDTO> findAlbumByTitle(@PathVariable String title) {
+        AlbumDTO albumDTO = albumService.findAlbumByTitle(title);
+        return new ResponseEntity<>(albumDTO, HttpStatus.OK);
     }
 }
