@@ -5,6 +5,7 @@ import com.example.musicLibrary.dto.ArtistDTO;
 import com.example.musicLibrary.dto.forms.ArtistForm;
 import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.ArtistService;
+import com.example.musicLibrary.util.ArtistMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,27 +16,27 @@ import java.util.List;
 public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistDaoImpl artistDao;
-    private final ModelMapper modelMapper;
+    private final ArtistMapper artistMapper;
 
     @Autowired
-    public ArtistServiceImpl(ArtistDaoImpl artistDao, ModelMapper modelMapper) {
+    public ArtistServiceImpl(ArtistDaoImpl artistDao, ArtistMapper artistMapper) {
         this.artistDao = artistDao;
-        this.modelMapper = modelMapper;
+        this.artistMapper = artistMapper;
     }
 
     @Override
     public ArtistDTO createArtist(ArtistDTO artistDTO) {
-       return mapToDTO(artistDao.createArtist(mapToEntity(artistDTO)));
+        return artistMapper.mapToDTO(artistDao.createArtist(artistMapper.mapToEntity(artistDTO)));
     }
 
     @Override
     public ArtistDTO getArtistById(long id) {
-        return mapToDTO(artistDao.getArtistById(id));
+        return artistMapper.mapToDTO(artistDao.getArtistById(id));
     }
 
     @Override
     public List<ArtistDTO> getAllArtists() {
-        return artistDao.getAllArtists().stream().map(this::mapToDTO).toList();
+        return artistDao.getAllArtists().stream().map(artistMapper::mapToDTO).toList();
     }
 
     @Override
@@ -46,7 +47,7 @@ public class ArtistServiceImpl implements ArtistService {
         artistUpdate.setDateOfBirth(artistUpdate.getDateOfBirth());
 
         Artist newArtist = artistDao.updateArtist(artistUpdate);
-        return mapToDTO(newArtist);
+        return artistMapper.mapToDTO(newArtist);
     }
 
     @Override
@@ -56,14 +57,6 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public ArtistDTO findArtistByName(String name) {
-        return mapToDTO(artistDao.findArtistByName(name));
-    }
-
-    private Artist mapToEntity(ArtistDTO artistDTO) {
-        return modelMapper.map(artistDTO, Artist.class);
-    }
-
-    private ArtistDTO mapToDTO(Artist newArtist) {
-        return modelMapper.map(newArtist, ArtistDTO.class);
+        return artistMapper.mapToDTO(artistDao.findArtistByName(name));
     }
 }

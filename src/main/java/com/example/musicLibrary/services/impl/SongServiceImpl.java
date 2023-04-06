@@ -1,16 +1,13 @@
 package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.impl.AlbumDaoImpl;
-import com.example.musicLibrary.dao.impl.GenreDaoImpl;
 import com.example.musicLibrary.dao.impl.SongDaoImpl;
-import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
 import com.example.musicLibrary.entity.Album;
-import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 import com.example.musicLibrary.services.SongService;
-import org.modelmapper.ModelMapper;
+import com.example.musicLibrary.util.SongMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,33 +18,32 @@ public class SongServiceImpl implements SongService {
 
     private final AlbumDaoImpl albumDao;
     private final SongDaoImpl songDao;
-    private final GenreDaoImpl genreDao;
-    private final ModelMapper modelMapper;
+    private final SongMapper songMapper;
+
 
     @Autowired
-    public SongServiceImpl(AlbumDaoImpl albumDao, SongDaoImpl songDao, GenreDaoImpl genreDao, ModelMapper modelMapper) {
+    public SongServiceImpl(AlbumDaoImpl albumDao, SongDaoImpl songDao, SongMapper songMapper) {
         this.albumDao = albumDao;
         this.songDao = songDao;
-        this.genreDao = genreDao;
-        this.modelMapper = modelMapper;
+        this.songMapper = songMapper;
     }
 
     @Override
     public SongDTO createSong(SongDTO songDTO, long albumId) {
         Album album = albumDao.getAlbumById(albumId);
         songDTO.setAlbum(album);
-        return mapToDTO(songDao.createSong(mapToEntity(songDTO)));
+        return songMapper.mapToDTO(songDao.createSong(songMapper.mapToEntity(songDTO)));
     }
 
     @Override
     public SongDTO getSongById(long id) {
-        return mapToDTO(songDao.getSongById(id));
+        return songMapper.mapToDTO(songDao.getSongById(id));
     }
 
     @Override
     public List<SongDTO> getAllSongs() {
         List<Song> songList = songDao.getAllSongs();
-        return songList.stream().map(this::mapToDTO).toList();
+        return songList.stream().map(songMapper::mapToDTO).toList();
     }
 
     @Override
@@ -59,7 +55,7 @@ public class SongServiceImpl implements SongService {
         songUpdate.setAlbum(album);
 
         Song newSong = songDao.updateSong(songUpdate);
-        return mapToDTO(newSong);
+        return songMapper.mapToDTO(newSong);
     }
 
     @Override
@@ -70,23 +66,23 @@ public class SongServiceImpl implements SongService {
     @Override
     public List<SongDTO> getSongsByAlbumId(long albumId) {
         List<Song> songList = songDao.getSongsByAlbumId(albumId);
-        return songList.stream().map(this::mapToDTO).toList();
+        return songList.stream().map(songMapper::mapToDTO).toList();
     }
 
     @Override
     public SongDTO getSongByAlbumIdAndSongId(long albumId, long songId) {
-        return mapToDTO(songDao.getSongByAlbumIdAndSongId(albumId, songId));
+        return songMapper.mapToDTO(songDao.getSongByAlbumIdAndSongId(albumId, songId));
     }
 
     @Override
     public List<SongDTO> getSongsByArtistId(long artistId) {
         List<Song> songList = songDao.getSongsByArtistId(artistId);
-        return songList.stream().map(this::mapToDTO).toList();
+        return songList.stream().map(songMapper::mapToDTO).toList();
     }
 
     @Override
     public SongDTO getSongByArtistIdAndSongId(long artistId, long songId) {
-        return mapToDTO(songDao.getSongByArtistIdAndSongId(artistId, songId));
+        return songMapper.mapToDTO(songDao.getSongByArtistIdAndSongId(artistId, songId));
     }
 
     @Override
@@ -97,23 +93,11 @@ public class SongServiceImpl implements SongService {
     @Override
     public List<SongDTO> getAllSongsByGenreId(long genreId) {
         List<Song> songList = songDao.getAllSongsByGenreId(genreId);
-        return songList.stream().map(this::mapToDTO).toList();
+        return songList.stream().map(songMapper::mapToDTO).toList();
     }
 
     @Override
     public SongDTO findSongByTitle(String title) {
-        return mapToDTO(songDao.findSongByTitle(title));
-    }
-
-    private Song mapToEntity(SongDTO songDTO) {
-        return modelMapper.map(songDTO, Song.class);
-    }
-
-    private GenreDTO mapToDTO(Genre newGenre) {
-        return modelMapper.map(newGenre, GenreDTO.class);
-    }
-
-    private SongDTO mapToDTO(Song newSong) {
-        return modelMapper.map(newSong, SongDTO.class);
+        return songMapper.mapToDTO(songDao.findSongByTitle(title));
     }
 }

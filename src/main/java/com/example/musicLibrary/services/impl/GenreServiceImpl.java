@@ -8,6 +8,7 @@ import com.example.musicLibrary.dto.forms.GenreForm;
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 import com.example.musicLibrary.services.GenreService;
+import com.example.musicLibrary.util.GenreMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,14 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService {
 
     private final GenreDaoImpl genreDao;
-    private final ModelMapper modelMapper;
     private final SongDaoImpl songDao;
+    private final GenreMapper genreMapper;
 
     @Autowired
-    public GenreServiceImpl(GenreDaoImpl genreDao, ModelMapper modelMapper, SongDaoImpl songDao) {
+    public GenreServiceImpl(GenreDaoImpl genreDao, GenreMapper genreMapper, SongDaoImpl songDao) {
         this.genreDao = genreDao;
-        this.modelMapper = modelMapper;
         this.songDao = songDao;
+        this.genreMapper = genreMapper;
     }
 
     @Override
@@ -34,17 +35,17 @@ public class GenreServiceImpl implements GenreService {
         List<Song> songList = new ArrayList<>();
         songList.add(songDao.getSongById(songId));
         genreDTO.setSongs(songList);
-        return mapToDTO(genreDao.createGenre(mapToEntity(genreDTO)));
+        return genreMapper.mapToDTO(genreDao.createGenre(genreMapper.mapToEntity(genreDTO)));
     }
 
     @Override
     public GenreDTO getGenreById(long id) {
-       return mapToDTO(genreDao.getGenreById(id));
+       return genreMapper.mapToDTO(genreDao.getGenreById(id));
     }
 
     @Override
     public List<GenreDTO> getAllGenres() {
-        return genreDao.getAllGenres().stream().map(this::mapToDTO).toList();
+        return genreDao.getAllGenres().stream().map(genreMapper::mapToDTO).toList();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class GenreServiceImpl implements GenreService {
         genreUpdate.setSongs(songs);
 
         Genre newGenre = genreDao.updateGenre(genreUpdate);
-        return mapToDTO(newGenre);
+        return genreMapper.mapToDTO(newGenre);
     }
 
     @Override
@@ -71,28 +72,18 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<GenreDTO> getAllGenresBySongId(long songId) {
-        return genreDao.getAllGenresBySongId(songId).stream().map(this::mapToDTO).toList();
+        return genreDao.getAllGenresBySongId(songId).stream().map(genreMapper::mapToDTO).toList();
     }
 
     @Override
     public List<SongDTO> getAllSongsByGenreId(long genreId) {
-        return genreDao.getAllSongsByGenreId(genreId).stream().map(this::mapToDTO).toList();
+        return genreDao.getAllSongsByGenreId(genreId).stream().map(genreMapper::mapToDTO).toList();
     }
 
     @Override
     public GenreDTO findGenreByTitle(String title) {
-        return mapToDTO(genreDao.findGenreByTitle(title));
+        return genreMapper.mapToDTO(genreDao.findGenreByTitle(title));
     }
 
-    private Genre mapToEntity(GenreDTO genreDTO) {
-        return modelMapper.map(genreDTO, Genre.class);
-    }
 
-    private SongDTO mapToDTO(Song newSong) {
-        return modelMapper.map(newSong, SongDTO.class);
-    }
-
-    private GenreDTO mapToDTO(Genre newGenre) {
-        return modelMapper.map(newGenre, GenreDTO.class);
-    }
 }
