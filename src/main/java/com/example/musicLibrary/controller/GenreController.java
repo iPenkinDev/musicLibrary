@@ -1,9 +1,10 @@
-package com.example.musicLibrary.controllers;
+package com.example.musicLibrary.controller;
 
 import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.GenreForm;
-import com.example.musicLibrary.services.impl.GenreServiceImpl;
+import com.example.musicLibrary.services.GenreService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +15,16 @@ import java.util.List;
 @RequestMapping("/genres")
 public class GenreController {
 
-    private final GenreServiceImpl genreService;
+    private final GenreService genreService;
 
     @Autowired
-    public GenreController(GenreServiceImpl genreService) {
+    public GenreController(GenreService genreService) {
         this.genreService = genreService;
     }
 
-    @PostMapping("/create/{songId}")
-    public ResponseEntity<GenreDTO> createGenre(@RequestBody GenreDTO genreDTO, @PathVariable long songId) {
-        GenreDTO genreCreateDTO = genreService.createGenre(genreDTO, songId);
+    @PostMapping("/create/")
+    public ResponseEntity<GenreDTO> createGenre(@Valid @RequestBody GenreDTO genreDTO) {
+        GenreDTO genreCreateDTO = genreService.createGenre(genreDTO);
         System.out.println("Genre with title " + genreCreateDTO.getTitle() + " was created");
         return ResponseEntity.ok(genreCreateDTO);
     }

@@ -1,9 +1,9 @@
-package com.example.musicLibrary.controllers;
+package com.example.musicLibrary.controller;
 
-import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
-import com.example.musicLibrary.services.impl.SongServiceImpl;
+import com.example.musicLibrary.services.SongService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +16,20 @@ import java.util.List;
 @RequestMapping("/songs")
 public class SongController {
 
-    private final SongServiceImpl songService;
+    private final SongService songService;
 
     @Autowired
-    public SongController(SongServiceImpl songService) {
+    public SongController(SongService songService) {
         this.songService = songService;
     }
 
-    @PostMapping("/create/{album_id}")
-    public ResponseEntity<SongDTO> createSong(@RequestBody SongDTO songDTO, @PathVariable(name = "album_id") long albumId) {
-        SongDTO songCreateDTO = songService.createSong(songDTO, albumId);
+    @PostMapping("/create/{album_id}/genre/{genre_id}")
+    public ResponseEntity<SongDTO> createSong(@RequestBody SongDTO songDTO, @PathVariable(name = "album_id") long albumId,
+                                              @PathVariable (name = "genre_id") long genreId) {
+        SongDTO songCreateDTO = songService.createSong(songDTO, albumId, genreId);
         return new ResponseEntity<>(songCreateDTO, HttpStatus.CREATED);
     }
+
 
     @GetMapping("/{id}")
     public SongDTO getSongById(@PathVariable long id) {

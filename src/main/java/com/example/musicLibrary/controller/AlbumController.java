@@ -1,8 +1,9 @@
-package com.example.musicLibrary.controllers;
+package com.example.musicLibrary.controller;
 
 import com.example.musicLibrary.dto.AlbumDTO;
 import com.example.musicLibrary.dto.forms.AlbumForm;
-import com.example.musicLibrary.services.impl.AlbumServiceImpl;
+import com.example.musicLibrary.services.AlbumService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +15,15 @@ import java.util.List;
 @RequestMapping("/albums")
 public class AlbumController {
 
-    private final AlbumServiceImpl albumService;
+    private final AlbumService albumService;
 
     @Autowired
-    public AlbumController(AlbumServiceImpl albumService) {
+    public AlbumController(AlbumService albumService) {
         this.albumService = albumService;
     }
 
     @PostMapping("/create/{artist_id}")
-    public ResponseEntity<AlbumDTO> createAlbum(@RequestBody AlbumDTO albumDTO, @PathVariable(name = "artist_id") long artistId) {
+    public ResponseEntity<AlbumDTO> createAlbum(@Valid @RequestBody AlbumDTO albumDTO, @PathVariable(name = "artist_id") long artistId) {
         AlbumDTO albumCreateDTO = albumService.createAlbum(albumDTO, artistId);
         return new ResponseEntity<>(albumCreateDTO, HttpStatus.CREATED);
     }
@@ -40,7 +41,7 @@ public class AlbumController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<AlbumDTO> updateAlbum(@RequestBody AlbumForm albumForm) {
+    public ResponseEntity<AlbumDTO> updateAlbum(@Valid @RequestBody AlbumForm albumForm) {
         AlbumDTO response = albumService.updateAlbum(albumForm);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

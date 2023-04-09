@@ -1,10 +1,9 @@
-package com.example.musicLibrary.controllers;
+package com.example.musicLibrary.controller;
 
 import com.example.musicLibrary.dto.ArtistDTO;
-import com.example.musicLibrary.dto.forms.AlbumForm;
 import com.example.musicLibrary.dto.forms.ArtistForm;
-import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.impl.ArtistServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,9 @@ public class ArtistController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ArtistDTO> createArtist(@RequestBody ArtistDTO artistDTO) {
-        ArtistDTO artistCreateDTO = artistService.createArtist(artistDTO);
-        return new ResponseEntity<>(artistCreateDTO, HttpStatus.CREATED);
+    public ResponseEntity<ArtistDTO> createArtist(@Valid @RequestBody ArtistDTO artistDTO) {
+            ArtistDTO artistCreateDTO = artistService.createArtist(artistDTO);
+            return ResponseEntity.ok(artistCreateDTO);
     }
 
     @GetMapping("/{id}")

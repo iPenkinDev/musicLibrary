@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface GenreService {
-    GenreDTO createGenre(GenreDTO genreDTO, long songId);
+    GenreDTO createGenre(GenreDTO genreDTO);
 
     GenreDTO getGenreById(long id);
 

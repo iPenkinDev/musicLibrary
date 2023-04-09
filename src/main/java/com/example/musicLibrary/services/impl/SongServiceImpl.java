@@ -1,10 +1,12 @@
 package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.AlbumDAO;
+import com.example.musicLibrary.dao.GenreDAO;
 import com.example.musicLibrary.dao.SongDAO;
 import com.example.musicLibrary.dto.SongDTO;
 import com.example.musicLibrary.dto.forms.SongForm;
 import com.example.musicLibrary.entity.Album;
+import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 import com.example.musicLibrary.services.SongService;
 import com.example.musicLibrary.util.SongMapper;
@@ -18,20 +20,25 @@ public class SongServiceImpl implements SongService {
 
     private final AlbumDAO albumDao;
     private final SongDAO songDao;
+    private final GenreDAO genreDao;
     private final SongMapper songMapper;
 
 
     @Autowired
-    public SongServiceImpl(AlbumDAO albumDao, SongDAO songDao, SongMapper songMapper) {
+    public SongServiceImpl(AlbumDAO albumDao, SongDAO songDao, GenreDAO genreDao, SongMapper songMapper) {
         this.albumDao = albumDao;
         this.songDao = songDao;
+        this.genreDao = genreDao;
         this.songMapper = songMapper;
     }
 
     @Override
-    public SongDTO createSong(SongDTO songDTO, long albumId) {
+    public SongDTO createSong(SongDTO songDTO, long albumId, long genreId) {
         Album album = albumDao.getAlbumById(albumId);
+        Genre genre = genreDao.getGenreById(genreId);
+        List<Genre> genreList = List.of(genre);
         songDTO.setAlbum(album);
+        songDTO.setGenres(genreList);
         return songMapper.mapToDTO(songDao.createSong(songMapper.mapToEntity(songDTO)));
     }
 
@@ -50,10 +57,12 @@ public class SongServiceImpl implements SongService {
     public SongDTO updateSong(SongForm songForm) {
         Song songUpdate = songDao.getSongById(songForm.getId());
         Album album = albumDao.getAlbumById(songForm.getAlbumId());
+       List<Genre> genreList = songUpdate.getGenres();
+       genreList.add(genreDao.getGenreById(songForm.getGenreId()));
         songUpdate.setTitle(songForm.getTitle());
         songUpdate.setYear(songForm.getYear());
         songUpdate.setAlbum(album);
-
+        songUpdate.setGenres(genreList);
         Song newSong = songDao.updateSong(songUpdate);
         return songMapper.mapToDTO(newSong);
     }

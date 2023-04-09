@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface SongService {
-    SongDTO createSong(SongDTO songDTO, long albumId);
+    SongDTO createSong(SongDTO songDTO, long albumId, long genreId);
 
     SongDTO getSongById(long id);
 

@@ -6,6 +6,7 @@ import com.example.musicLibrary.dto.forms.ArtistForm;
 import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.ArtistService;
 import com.example.musicLibrary.util.ArtistMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,20 +31,28 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public ArtistDTO getArtistById(long id) {
+        if (artistDao.getArtistById(id) == null) {
+            throw new EntityNotFoundException("Artist with id " + id + " not found");
+        }
         return artistMapper.mapToDTO(artistDao.getArtistById(id));
     }
 
     @Override
     public List<ArtistDTO> getAllArtists() {
+        if (artistDao.getAllArtists().isEmpty())
+            throw new EntityNotFoundException("Artists not found");
         return artistDao.getAllArtists().stream().map(artistMapper::mapToDTO).toList();
     }
 
     @Override
     public ArtistDTO updateArtist(ArtistForm artistForm) {
+        if (artistDao.getArtistById(artistForm.getId()) == null) {
+            throw new EntityNotFoundException("Artist with id " + artistForm.getId() + " not found");
+        }
         Artist artistUpdate = artistDao.getArtistById(artistForm.getId());
         artistUpdate.setName(artistForm.getName());
         artistUpdate.setCountry(artistForm.getCountry());
-        artistUpdate.setDateOfBirth(artistUpdate.getDateOfBirth());
+        artistUpdate.setYearOfBirth(artistForm.getYearOfBirth());
 
         Artist newArtist = artistDao.updateArtist(artistUpdate);
         return artistMapper.mapToDTO(newArtist);
@@ -51,6 +60,9 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public void deleteArtist(long id) {
+        if (artistDao.getArtistById(id) == null) {
+            throw new EntityNotFoundException();
+        }
         artistDao.deleteArtist(id);
     }
 

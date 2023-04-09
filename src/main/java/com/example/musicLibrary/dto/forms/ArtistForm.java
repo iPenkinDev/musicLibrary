@@ -7,6 +7,6 @@ public class ArtistForm {
     private long id;
     private String name;
     private String country;
-    private int dateOfBirth;
+    private int yearOfBirth;
 
 }

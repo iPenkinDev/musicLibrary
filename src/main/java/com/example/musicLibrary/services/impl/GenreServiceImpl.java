@@ -9,10 +9,10 @@ import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
 import com.example.musicLibrary.services.GenreService;
 import com.example.musicLibrary.util.GenreMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,20 +30,18 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDTO createGenre(GenreDTO genreDTO, long songId) {
-        List<Song> songList = new ArrayList<>();
-        songList.add(songDao.getSongById(songId));
-        genreDTO.setSongs(songList);
+    public GenreDTO createGenre(GenreDTO genreDTO) {
         return genreMapper.mapToDTO(genreDao.createGenre(genreMapper.mapToEntity(genreDTO)));
     }
 
     @Override
     public GenreDTO getGenreById(long id) {
-       return genreMapper.mapToDTO(genreDao.getGenreById(id));
+        return genreMapper.mapToDTO(genreDao.getGenreById(id));
     }
 
     @Override
     public List<GenreDTO> getAllGenres() {
+
         return genreDao.getAllGenres().stream().map(genreMapper::mapToDTO).toList();
     }
 
@@ -61,7 +59,11 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public void deleteGenre(long id) {
-        genreDao.deleteGenre(id);
+        if (genreDao.getGenreById(id) == null) {
+            throw new EntityNotFoundException();
+        } else {
+            genreDao.deleteGenre(id);
+        }
     }
 
     @Override

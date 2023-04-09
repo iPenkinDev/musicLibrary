@@ -32,7 +32,7 @@ public class Artist {
     private String country;
 
     @Column(name = "artist_date_of_birth")
-    private int dateOfBirth;
+    private int yearOfBirth;
 
     @JsonIgnore
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
