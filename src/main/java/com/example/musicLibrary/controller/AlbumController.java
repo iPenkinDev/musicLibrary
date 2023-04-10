@@ -21,9 +21,9 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
-    @PostMapping()
-    public ResponseEntity<AlbumDTO> createAlbum(@Valid @RequestBody AlbumDTO albumDTO) {
-        AlbumDTO albumCreateDTO = albumService.createAlbum(albumDTO);
+    @PostMapping("/{artist_id}")
+    public ResponseEntity<AlbumDTO> createAlbum(@Valid @RequestBody AlbumDTO albumDTO, @PathVariable(name = "artist_id") long artistId) {
+        AlbumDTO albumCreateDTO = albumService.createAlbum(albumDTO, artistId);
         return new ResponseEntity<>(albumCreateDTO, HttpStatus.CREATED);
     }
 
@@ -51,13 +51,13 @@ public class AlbumController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/artist/{artist_id}/albums")
+    @GetMapping("/{artist_id}")
     public ResponseEntity<List<AlbumDTO>> getAlbumsByArtistId(@PathVariable(name = "artist_id") long artistId) {
         List<AlbumDTO> albumDTOList = albumService.getAlbumsByArtistId(artistId);
         return new ResponseEntity<>(albumDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/artist/{artist_id}/album/{album_id}")
+    @GetMapping("/{artist_id}/album/{album_id}")
     public ResponseEntity<AlbumDTO> getAlbumByArtistIdAndAlbumId(@PathVariable(name = "artist_id") long artistId, @PathVariable(name = "album_id") long albumId) {
         AlbumDTO albumDTO = albumService.getAlbumByArtistIdAndAlbumId(artistId, albumId);
         return new ResponseEntity<>(albumDTO, HttpStatus.OK);

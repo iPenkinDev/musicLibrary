@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public interface AlbumService {
-    AlbumDTO createAlbum(AlbumDTO albumDTO);
+    AlbumDTO createAlbum(AlbumDTO albumDTO, long artistId);
 
     AlbumDTO getAlbumById(long id);
 

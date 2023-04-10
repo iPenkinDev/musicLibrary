@@ -22,7 +22,7 @@ public class ArtistController {
     }
 
     @PostMapping()
-    public ResponseEntity<ArtistDTO> createArtist(@RequestBody ArtistDTO artistDTO) {
+    public ResponseEntity<ArtistDTO> createArtist(@RequestBody @Valid ArtistDTO artistDTO) {
             ArtistDTO artistCreateDTO = artistService.createArtist(artistDTO);
             return ResponseEntity.ok(artistCreateDTO);
     }
@@ -32,24 +32,24 @@ public class ArtistController {
         return artistService.getArtistById(id);
     }
 
-//    @GetMapping()
-//    public List<ArtistDTO> getAllArtists() {
-//        return artistService.getAllArtists();
-//    }
+    @GetMapping()
+    public List<ArtistDTO> getAllArtists() {
+        return artistService.getAllArtists();
+    }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<ArtistDTO> updateArtist(@Valid @RequestBody ArtistDTO artistDTO, @PathVariable(name = "id") long id) {
-//        ArtistDTO response = artistService.updateArtist(artistDTO, id);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ArtistDTO> updateArtist(@Valid @RequestBody ArtistDTO artistDTO, @PathVariable(name = "id") long id) {
+        ArtistDTO response = artistService.updateArtist(artistDTO, id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
-//    @DeleteMapping("/{id}")
-//    public void deleteArtist(@PathVariable(name = "id") long id) {
-//        artistService.deleteArtist(id);
-//    }
+    @DeleteMapping("/{id}")
+    public void deleteArtist(@PathVariable(name = "id") long id) {
+        artistService.deleteArtist(id);
+    }
 
-//    @GetMapping("/{name}")
-//    public ArtistDTO findArtistByName(@PathVariable String name) {
-//        return artistService.findArtistByName(name);
-//    }
+    @GetMapping("/find/{name}")
+    public ArtistDTO findArtistByName(@PathVariable String name) {
+        return artistService.findArtistByName(name);
+    }
 }

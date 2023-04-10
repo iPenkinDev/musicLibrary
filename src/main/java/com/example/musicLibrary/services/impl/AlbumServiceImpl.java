@@ -3,8 +3,10 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.AlbumDAO;
 import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.dto.AlbumDTO;
+import com.example.musicLibrary.dto.ArtistDTO;
 import com.example.musicLibrary.entity.Album;
 import com.example.musicLibrary.entity.Artist;
+import com.example.musicLibrary.exception.ApplicationException;
 import com.example.musicLibrary.services.AlbumService;
 import com.example.musicLibrary.util.AlbumMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,17 +31,18 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public AlbumDTO createAlbum(AlbumDTO albumDTO) {
-       Artist artist = artistDao.getArtistById(albumDTO.getArtist().getId());
+    public AlbumDTO createAlbum(AlbumDTO albumDTO, long artistId) {
+        Artist artist = artistDao.getArtistById(artistId);
         if (artist == null)
-            throw new EntityNotFoundException("Artist with id " + albumDTO.getArtist().getId() + " not found");
+            throw new ApplicationException("Artist with id " + artistId + " not found");
+        albumDTO.setArtist(artist);
         return albumMapper.mapToDTO(albumDao.createAlbum(albumMapper.mapToEntity(albumDTO)));
     }
 
     @Override
     public AlbumDTO getAlbumById(long id) {
         if (albumDao.getAlbumById(id) == null)
-            throw new EntityNotFoundException("Album with id " + id + " not found");
+            throw new ApplicationException("Album with id " + id + " not found");
         return albumMapper.mapToDTO(albumDao.getAlbumById(id));
     }
 
@@ -47,7 +50,7 @@ public class AlbumServiceImpl implements AlbumService {
     public List<AlbumDTO> getAllAlbums() {
         List<Album> albumList = albumDao.getAllAlbums();
         if (albumList.isEmpty())
-            throw new EntityNotFoundException("Albums not found");
+            throw new ApplicationException("Albums not found");
         return albumList.stream().map(albumMapper::mapToDTO).toList();
     }
 
@@ -56,7 +59,7 @@ public class AlbumServiceImpl implements AlbumService {
     public AlbumDTO updateAlbum(AlbumDTO albumDTO, long id) {
         Album albumUpdate = albumDao.getAlbumById(id);
         if (albumUpdate == null) {
-            throw new EntityNotFoundException("Album with id " + id + " not found");
+            throw new ApplicationException();
         }
         albumUpdate.setTitle(albumDTO.getTitle());
         albumUpdate.setYear(albumDTO.getYear());
@@ -67,7 +70,7 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public void deleteAlbum(long id) {
         if (albumDao.getAlbumById(id) == null)
-            throw new EntityNotFoundException("Album with id " + id + " not found");
+            throw new ApplicationException("Album with id " + id + " not found");
         albumDao.deleteAlbum(id);
     }
 
@@ -75,21 +78,21 @@ public class AlbumServiceImpl implements AlbumService {
     public List<AlbumDTO> getAlbumsByArtistId(long artistId) {
         List<Album> albumList = albumDao.getAlbumsByArtistId(artistId);
         if (albumList.isEmpty())
-            throw new EntityNotFoundException("Albums not found");
+            throw new ApplicationException("Albums not found");
         return albumList.stream().map(albumMapper::mapToDTO).toList();
     }
 
     @Override
     public AlbumDTO getAlbumByArtistIdAndAlbumId(long artistId, long albumId) {
         if (albumDao.getAlbumByArtistIdAndAlbumId(artistId, albumId) == null)
-            throw new EntityNotFoundException();
+            throw new ApplicationException("Album with id " + albumId + " not found");
         return albumMapper.mapToDTO(albumDao.getAlbumByArtistIdAndAlbumId(artistId, albumId));
     }
 
     @Override
     public AlbumDTO findAlbumByTitle(String title) {
         if (albumDao.findAlbumByTitle(title) == null)
-            throw new NoResultException();
+            throw new ApplicationException("Album with title " + title + " not found");
         return albumMapper.mapToDTO(albumDao.findAlbumByTitle(title));
     }
 }

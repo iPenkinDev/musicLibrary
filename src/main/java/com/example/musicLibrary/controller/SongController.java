@@ -23,7 +23,7 @@ public class SongController {
         this.songService = songService;
     }
 
-    @PostMapping("/create/{album_id}/genre/{genre_id}")
+    @PostMapping("/{album_id}/genre/{genre_id}")
     public ResponseEntity<SongDTO> createSong(@RequestBody SongDTO songDTO, @PathVariable(name = "album_id") long albumId,
                                               @PathVariable (name = "genre_id") long genreId) {
         SongDTO songCreateDTO = songService.createSong(songDTO, albumId, genreId);
@@ -36,14 +36,17 @@ public class SongController {
         return songService.getSongById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public List<SongDTO> getAllSongs() {
         return songService.getAllSongs();
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<SongDTO> updateSong(@RequestBody SongForm songForm) {
-        SongDTO response = songService.updateSong(songForm);
+    @PutMapping("/{id}/album/{album_id}/genre/{genre_id}")
+    public ResponseEntity<SongDTO> updateSong(@RequestBody @Valid SongDTO songDTO,
+                                              @PathVariable long id,
+                                              @PathVariable (name = "album_id") long albumId,
+                                              @PathVariable (name = "genre_id") long genreId) {
+        SongDTO response = songService.updateSong(songDTO, id, albumId, genreId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -52,32 +55,32 @@ public class SongController {
         songService.deleteSong(id);
     }
 
-    @GetMapping("/album/{album_id}")
+    @GetMapping("/albums/{album_id}")
     public List<SongDTO> getSongsByAlbumId(@PathVariable(name = "album_id") long albumId) {
         return songService.getSongsByAlbumId(albumId);
     }
 
-    @GetMapping("/album/{album_id}/song/{song_id}")
+    @GetMapping("/albums/{album_id}/song/{song_id}")
     public SongDTO getSongByAlbumIdAndSongId(@PathVariable(name = "album_id") long albumId, @PathVariable(name = "song_id") long songId) {
         return songService.getSongByAlbumIdAndSongId(albumId, songId);
     }
 
-    @GetMapping("/artist/{artist_id}")
+    @GetMapping("/artists/{artist_id}")
     public List<SongDTO> getSongsByArtistId(@PathVariable(name = "artist_id") long artistId) {
         return songService.getSongsByArtistId(artistId);
     }
 
-    @GetMapping("/artist/{artist_id}/song/{song_id}")
+    @GetMapping("/artists/{artist_id}/song/{song_id}")
     public SongDTO getSongByArtistIdAndSongId(@PathVariable(name = "artist_id") long artistId, @PathVariable(name = "song_id") long songId) {
         return songService.getSongByArtistIdAndSongId(artistId, songId);
     }
 
-    @DeleteMapping("/delete/{genre_id}")
+    @DeleteMapping("/genres/{genre_id}")
     public void deleteSongByGenreId(@PathVariable(name = "genre_id") long genreId) {
         songService.deleteSongByGenreId(genreId);
     }
 
-    @GetMapping("/genre/{genre_id}")
+    @GetMapping("/genres/{genre_id}")
     public List<SongDTO> getAllSongsByGenreId(@PathVariable(name = "genre_id") long genreId) {
         return songService.getAllSongsByGenreId(genreId);
     }

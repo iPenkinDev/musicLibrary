@@ -1,8 +1,6 @@
 package com.example.musicLibrary.services;
 
-import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
-import com.example.musicLibrary.dto.forms.SongForm;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +13,7 @@ public interface SongService {
 
     List<SongDTO> getAllSongs();
 
-    SongDTO updateSong(SongForm songForm);
+    SongDTO updateSong(SongDTO songDTO, long id, long albumId, long genreId);
 
     void deleteSong(long id);
 

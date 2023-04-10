@@ -3,11 +3,10 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.dto.ArtistDTO;
 import com.example.musicLibrary.entity.Artist;
-import com.example.musicLibrary.exception.ArtistNotFoundException;
+import com.example.musicLibrary.exception.ApplicationException;
 import com.example.musicLibrary.services.ArtistService;
 import com.example.musicLibrary.util.ArtistMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,20 +31,24 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ArtistDTO getArtistById(long id) {
         if (artistDao.getArtistById(id) == null) {
-           throw new ArtistNotFoundException("Artist with id " + id + " not found");
+           throw new ApplicationException("Artist with id " + id + " not found");
         }
         return artistMapper.mapToDTO(artistDao.getArtistById(id));
     }
 
     @Override
     public List<ArtistDTO> getAllArtists() {
+        if (artistDao.getAllArtists().isEmpty())
+            throw new ApplicationException("Artists not found");
         return artistDao.getAllArtists().stream().map(artistMapper::mapToDTO).toList();
     }
 
     @Override
     public ArtistDTO updateArtist(ArtistDTO artistDTO, long id) {
         Artist artistUpdate = artistDao.getArtistById(id);
-
+        if (artistUpdate == null) {
+            throw new ApplicationException("Artist with id " + id + " not found");
+        }
         artistUpdate.setName(artistDTO.getName());
         artistUpdate.setCountry(artistDTO.getCountry());
         artistUpdate.setYearOfBirth(artistDTO.getYearOfBirth());
@@ -55,11 +58,17 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public void deleteArtist(long id) {
+        if (artistDao.getArtistById(id) == null) {
+            throw new ApplicationException("Artist with id " + id + " not found");
+        }
         artistDao.deleteArtist(id);
     }
 
     @Override
     public ArtistDTO findArtistByName(String name) {
+        if (artistDao.findArtistByName(name) == null) {
+            throw new ApplicationException();
+        }
         return artistMapper.mapToDTO(artistDao.findArtistByName(name));
     }
 }
