@@ -1,7 +1,6 @@
 package com.example.musicLibrary.controller;
 
 import com.example.musicLibrary.dto.AlbumDTO;
-import com.example.musicLibrary.dto.forms.AlbumForm;
 import com.example.musicLibrary.services.AlbumService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,9 @@ public class AlbumController {
         this.albumService = albumService;
     }
 
-    @PostMapping("/create/{artist_id}")
-    public ResponseEntity<AlbumDTO> createAlbum(@Valid @RequestBody AlbumDTO albumDTO, @PathVariable(name = "artist_id") long artistId) {
-        AlbumDTO albumCreateDTO = albumService.createAlbum(albumDTO, artistId);
+    @PostMapping()
+    public ResponseEntity<AlbumDTO> createAlbum(@Valid @RequestBody AlbumDTO albumDTO) {
+        AlbumDTO albumCreateDTO = albumService.createAlbum(albumDTO);
         return new ResponseEntity<>(albumCreateDTO, HttpStatus.CREATED);
     }
 
@@ -34,15 +33,15 @@ public class AlbumController {
         return new ResponseEntity<>(albumDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public ResponseEntity<List<AlbumDTO>> getAllAlbums() {
         List<AlbumDTO> albumDTOList = albumService.getAllAlbums();
         return new ResponseEntity<>(albumDTOList, HttpStatus.OK);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<AlbumDTO> updateAlbum(@Valid @RequestBody AlbumForm albumForm) {
-        AlbumDTO response = albumService.updateAlbum(albumForm);
+    @PutMapping("/{id}")
+    public ResponseEntity<AlbumDTO> updateAlbum(@Valid @RequestBody AlbumDTO albumDTO, long id) {
+        AlbumDTO response = albumService.updateAlbum(albumDTO, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -52,7 +51,7 @@ public class AlbumController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/artist/{artist_id}")
+    @GetMapping("/artist/{artist_id}/albums")
     public ResponseEntity<List<AlbumDTO>> getAlbumsByArtistId(@PathVariable(name = "artist_id") long artistId) {
         List<AlbumDTO> albumDTOList = albumService.getAlbumsByArtistId(artistId);
         return new ResponseEntity<>(albumDTOList, HttpStatus.OK);

@@ -1,7 +1,6 @@
 package com.example.musicLibrary.controller;
 
 import com.example.musicLibrary.dto.ArtistDTO;
-import com.example.musicLibrary.dto.forms.ArtistForm;
 import com.example.musicLibrary.services.impl.ArtistServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,8 @@ public class ArtistController {
         this.artistService = artistService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<ArtistDTO> createArtist(@Valid @RequestBody ArtistDTO artistDTO) {
+    @PostMapping()
+    public ResponseEntity<ArtistDTO> createArtist(@RequestBody ArtistDTO artistDTO) {
             ArtistDTO artistCreateDTO = artistService.createArtist(artistDTO);
             return ResponseEntity.ok(artistCreateDTO);
     }
@@ -33,24 +32,24 @@ public class ArtistController {
         return artistService.getArtistById(id);
     }
 
-    @GetMapping("/all")
-    public List<ArtistDTO> getAllArtists() {
-        return artistService.getAllArtists();
-    }
+//    @GetMapping()
+//    public List<ArtistDTO> getAllArtists() {
+//        return artistService.getAllArtists();
+//    }
 
-    @PutMapping("/update")
-    public ResponseEntity<ArtistDTO> updateArtist(@RequestBody ArtistForm artistForm) {
-        ArtistDTO response = artistService.updateArtist(artistForm);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<ArtistDTO> updateArtist(@Valid @RequestBody ArtistDTO artistDTO, @PathVariable(name = "id") long id) {
+//        ArtistDTO response = artistService.updateArtist(artistDTO, id);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
-    @DeleteMapping("/{id}")
-    public void deleteArtist(@PathVariable(name = "id") long id) {
-        artistService.deleteArtist(id);
-    }
+//    @DeleteMapping("/{id}")
+//    public void deleteArtist(@PathVariable(name = "id") long id) {
+//        artistService.deleteArtist(id);
+//    }
 
-    @GetMapping("/find/{name}")
-    public ArtistDTO findArtistByName(@PathVariable String name) {
-        return artistService.findArtistByName(name);
-    }
+//    @GetMapping("/{name}")
+//    public ArtistDTO findArtistByName(@PathVariable String name) {
+//        return artistService.findArtistByName(name);
+//    }
 }

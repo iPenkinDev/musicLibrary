@@ -3,12 +3,12 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.AlbumDAO;
 import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.dto.AlbumDTO;
-import com.example.musicLibrary.dto.forms.AlbumForm;
 import com.example.musicLibrary.entity.Album;
 import com.example.musicLibrary.entity.Artist;
 import com.example.musicLibrary.services.AlbumService;
 import com.example.musicLibrary.util.AlbumMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +29,10 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public AlbumDTO createAlbum(AlbumDTO albumDTO, long artistId) {
-        Artist artist = artistDao.getArtistById(artistId);
-        if (artist == null) {
-            throw new EntityNotFoundException("Artist with id " + artistId + " not found");
-        }
-        albumDTO.setArtist(artist);
+    public AlbumDTO createAlbum(AlbumDTO albumDTO) {
+       Artist artist = artistDao.getArtistById(albumDTO.getArtist().getId());
+        if (artist == null)
+            throw new EntityNotFoundException("Artist with id " + albumDTO.getArtist().getId() + " not found");
         return albumMapper.mapToDTO(albumDao.createAlbum(albumMapper.mapToEntity(albumDTO)));
     }
 
@@ -55,21 +53,15 @@ public class AlbumServiceImpl implements AlbumService {
 
 
     @Override
-    public AlbumDTO updateAlbum(AlbumForm albumForm) {
-        Album albumUpdate = albumDao.getAlbumById(albumForm.getId());
+    public AlbumDTO updateAlbum(AlbumDTO albumDTO, long id) {
+        Album albumUpdate = albumDao.getAlbumById(id);
         if (albumUpdate == null) {
-            throw new EntityNotFoundException("Album with id " + albumForm.getId() + " not found");
+            throw new EntityNotFoundException("Album with id " + id + " not found");
         }
-        Artist artist = artistDao.getArtistById(albumForm.getArtistId());
-        if (artist == null) {
-            throw new EntityNotFoundException("Artist with id " + albumForm.getArtistId() + " not found");
-        }
-        albumUpdate.setTitle(albumForm.getTitle());
-        albumUpdate.setYear(albumForm.getYear());
-        albumUpdate.setArtist(artist);
+        albumUpdate.setTitle(albumDTO.getTitle());
+        albumUpdate.setYear(albumDTO.getYear());
 
-        Album newAlbum = albumDao.updateAlbum(albumUpdate);
-        return albumMapper.mapToDTO(newAlbum);
+        return albumMapper.mapToDTO(albumDao.updateAlbum(albumUpdate));
     }
 
     @Override
@@ -90,14 +82,14 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public AlbumDTO getAlbumByArtistIdAndAlbumId(long artistId, long albumId) {
         if (albumDao.getAlbumByArtistIdAndAlbumId(artistId, albumId) == null)
-            throw new EntityNotFoundException("Album with id " + albumId + " not found");
+            throw new EntityNotFoundException();
         return albumMapper.mapToDTO(albumDao.getAlbumByArtistIdAndAlbumId(artistId, albumId));
     }
 
     @Override
     public AlbumDTO findAlbumByTitle(String title) {
         if (albumDao.findAlbumByTitle(title) == null)
-            throw new EntityNotFoundException("Album with title " + title + " not found");
+            throw new NoResultException();
         return albumMapper.mapToDTO(albumDao.findAlbumByTitle(title));
     }
 }

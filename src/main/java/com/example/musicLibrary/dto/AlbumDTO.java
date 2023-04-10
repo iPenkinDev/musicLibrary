@@ -10,8 +10,8 @@ public class AlbumDTO {
     @NotNull(message = "Title cannot be null")
     private String title;
     @NotNull (message = "Genre cannot be null")
-    @Min(value = 4, message = "Interval must be in range 4")
-    @Max(value = 4, message = "Interval must be in range 4")
+    @Min(value = 1900, message = "Year cannot be less than 1900")
+    @Max(value = 2023, message = "Year cannot be greater than 2023")
     private int year;
     private Artist artist;
 }

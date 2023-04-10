@@ -1,19 +1,18 @@
 package com.example.musicLibrary.services;
 
 import com.example.musicLibrary.dto.AlbumDTO;
-import com.example.musicLibrary.dto.forms.AlbumForm;
 
 import java.util.List;
 
 
 public interface AlbumService {
-    AlbumDTO createAlbum(AlbumDTO albumDTO, long artistId);
+    AlbumDTO createAlbum(AlbumDTO albumDTO);
 
     AlbumDTO getAlbumById(long id);
 
     List<AlbumDTO> getAllAlbums();
 
-    AlbumDTO updateAlbum(AlbumForm albumForm);
+    AlbumDTO updateAlbum(AlbumDTO albumDTO, long id);
 
     void deleteAlbum(long id);
 
