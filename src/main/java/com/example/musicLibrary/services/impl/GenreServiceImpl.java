@@ -4,9 +4,9 @@ import com.example.musicLibrary.dao.GenreDAO;
 import com.example.musicLibrary.dao.SongDAO;
 import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
-import com.example.musicLibrary.dto.forms.GenreForm;
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
+import com.example.musicLibrary.exception.ApplicationException;
 import com.example.musicLibrary.services.GenreService;
 import com.example.musicLibrary.util.GenreMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,27 +30,41 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDTO createGenre(GenreDTO genreDTO) {
+    public GenreDTO createGenre(GenreDTO genreDTO, long songId) {
+        Song song = songDao.getSongById(songId);
+        if (song == null) {
+            throw new ApplicationException("Genre not found");
+        }
+        List<Song> songList = List.of(song);
+        genreDTO.setSongs(songList);
         return genreMapper.mapToDTO(genreDao.createGenre(genreMapper.mapToEntity(genreDTO)));
     }
 
     @Override
     public GenreDTO getGenreById(long id) {
+        if (genreDao.getGenreById(id) == null)
+            throw new ApplicationException("Genre not found");
         return genreMapper.mapToDTO(genreDao.getGenreById(id));
     }
 
     @Override
     public List<GenreDTO> getAllGenres() {
-
-        return genreDao.getAllGenres().stream().map(genreMapper::mapToDTO).toList();
+        List<Genre> genreList = genreDao.getAllGenres();
+        if (genreDao.getAllGenres().isEmpty()) {
+            throw new ApplicationException("No genres found");
+        }
+        return genreList.stream().map(genreMapper::mapToDTO).toList();
     }
 
     @Override
-    public GenreDTO updateGenre(GenreForm genreForm) {
-        Genre genreUpdate = genreDao.getGenreById(genreForm.getId());
+    public GenreDTO updateGenre(GenreDTO genreDTO, long id, long songId) {
+        Genre genreUpdate = genreDao.getGenreById(id);
+        if (genreUpdate == null || songDao.getSongById(songId) == null) {
+            throw new ApplicationException("Genre not found");
+        }
         List<Song> songs = genreUpdate.getSongs();
-        songs.add(songDao.getSongById(genreForm.getSongId()));
-        genreUpdate.setTitle(genreForm.getTitle());
+        songs.add(songDao.getSongById(songId));
+        genreUpdate.setTitle(genreDTO.getTitle());
         genreUpdate.setSongs(songs);
 
         Genre newGenre = genreDao.updateGenre(genreUpdate);
@@ -60,7 +74,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void deleteGenre(long id) {
         if (genreDao.getGenreById(id) == null) {
-            throw new EntityNotFoundException();
+            throw new ApplicationException("Genre not found");
         } else {
             genreDao.deleteGenre(id);
         }
@@ -68,23 +82,29 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public void deleteGenreBySongId(long id) {
+        if (songDao.getSongById(id) == null)
+            throw new ApplicationException("Genre not found");
         genreDao.deleteGenreBySongId(id);
     }
 
     @Override
     public List<GenreDTO> getAllGenresBySongId(long songId) {
+        if (songDao.getSongById(songId) == null)
+            throw new ApplicationException("Genre not found");
         return genreDao.getAllGenresBySongId(songId).stream().map(genreMapper::mapToDTO).toList();
     }
 
     @Override
     public List<SongDTO> getAllSongsByGenreId(long genreId) {
+        if (genreDao.getGenreById(genreId) == null)
+            throw new ApplicationException("Genre not found");
         return genreDao.getAllSongsByGenreId(genreId).stream().map(genreMapper::mapToDTO).toList();
     }
 
     @Override
     public GenreDTO findGenreByTitle(String title) {
+        if (genreDao.findGenreByTitle(title) == null)
+            throw new ApplicationException("Genre not found");
         return genreMapper.mapToDTO(genreDao.findGenreByTitle(title));
     }
-
-
 }

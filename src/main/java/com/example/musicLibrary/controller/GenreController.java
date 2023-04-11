@@ -6,6 +6,7 @@ import com.example.musicLibrary.dto.forms.GenreForm;
 import com.example.musicLibrary.services.GenreService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +23,12 @@ public class GenreController {
         this.genreService = genreService;
     }
 
-    @PostMapping("/create/")
-    public ResponseEntity<GenreDTO> createGenre(@Valid @RequestBody GenreDTO genreDTO) {
-        GenreDTO genreCreateDTO = genreService.createGenre(genreDTO);
+    @PostMapping("/{song_id}")
+    public ResponseEntity<GenreDTO> createGenre(@Valid @RequestBody GenreDTO genreDTO,
+            @PathVariable("song_id") long songId) {
+        GenreDTO genreCreateDTO = genreService.createGenre(genreDTO, songId);
         System.out.println("Genre with title " + genreCreateDTO.getTitle() + " was created");
-        return ResponseEntity.ok(genreCreateDTO);
+        return new ResponseEntity<>(genreCreateDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -34,28 +36,30 @@ public class GenreController {
         return genreService.getGenreById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public List<GenreDTO> getAllGenres() {
         return genreService.getAllGenres();
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<GenreDTO> updateGenre(GenreForm genreForm) {
-        GenreDTO genreUpdateDTO = genreService.updateGenre(genreForm);
-        return ResponseEntity.ok(genreUpdateDTO);
+    @PutMapping("/{id}/song/{song_id}")
+    public ResponseEntity<GenreDTO> updateGenre(@Valid @RequestBody GenreDTO genreDTO,
+                                                long id,
+                                                @PathVariable("song_id") long songId) {
+        GenreDTO genreUpdateDTO = genreService.updateGenre(genreDTO, id, songId);
+        return new ResponseEntity<>(genreUpdateDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteGenre(@PathVariable(name = "id") long id) {
+    public void deleteGenre(@PathVariable("id") long id) {
         genreService.deleteGenre(id);
     }
 
-    @GetMapping("/all/{songId}")
+    @GetMapping("/songs/{songId}")
     public List<GenreDTO> getAllGenresBySongId(@PathVariable long songId) {
         return genreService.getAllGenresBySongId(songId);
     }
 
-    @GetMapping("/all/songs/{genreId}")
+    @GetMapping("/genres/{genreId}")
     public List<SongDTO> getAllSongsByGenreId(@PathVariable long genreId) {
         return genreService.getAllSongsByGenreId(genreId);
     }

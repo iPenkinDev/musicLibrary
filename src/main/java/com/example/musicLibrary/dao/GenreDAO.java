@@ -37,7 +37,7 @@ public class GenreDAO {
 
     @Transactional(readOnly = true)
     public List<Genre> getAllGenres() {
-        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM genres g", Genre.class);
+        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g", Genre.class);
         return query.getResultList();
     }
 
@@ -79,7 +79,7 @@ public class GenreDAO {
 
     @Transactional(readOnly = true)
     public Genre findGenreByTitle(String title) {
-        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM genres g WHERE g.title = :title", Genre.class);
+        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g WHERE g.title = :title", Genre.class);
         query.setParameter("title", title);
         return query.getSingleResult();
     }

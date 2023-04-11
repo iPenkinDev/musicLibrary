@@ -9,13 +9,13 @@ import java.util.List;
 
 @Service
 public interface GenreService {
-    GenreDTO createGenre(GenreDTO genreDTO);
+    GenreDTO createGenre(GenreDTO genreDTO, long songId);
 
     GenreDTO getGenreById(long id);
 
     List<GenreDTO> getAllGenres();
 
-    GenreDTO updateGenre(GenreForm genreForm);
+    GenreDTO updateGenre(GenreDTO genreDTO, long id, long songId);
 
     void deleteGenre(long id);
 
