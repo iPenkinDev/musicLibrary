@@ -2,7 +2,9 @@ package com.example.musicLibrary.controller;
 
 import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
-import com.example.musicLibrary.dto.forms.GenreForm;
+import com.example.musicLibrary.dto.response.GenreResponse;
+import com.example.musicLibrary.enumeration.GenreSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import com.example.musicLibrary.services.GenreService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,9 @@ public class GenreController {
         this.genreService = genreService;
     }
 
-    @PostMapping("/{song_id}")
-    public ResponseEntity<GenreDTO> createGenre(@Valid @RequestBody GenreDTO genreDTO,
-            @PathVariable("song_id") long songId) {
-        GenreDTO genreCreateDTO = genreService.createGenre(genreDTO, songId);
-        System.out.println("Genre with title " + genreCreateDTO.getTitle() + " was created");
+    @PostMapping()
+    public ResponseEntity<GenreDTO> createGenre(@Valid @RequestBody GenreDTO genreDTO) {
+        GenreDTO genreCreateDTO = genreService.createGenre(genreDTO);
         return new ResponseEntity<>(genreCreateDTO, HttpStatus.CREATED);
     }
 
@@ -37,8 +37,13 @@ public class GenreController {
     }
 
     @GetMapping()
-    public List<GenreDTO> getAllGenres() {
-        return genreService.getAllGenres();
+    public GenreResponse getAllAlbumsPages(
+            @Valid @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "ID", required = false) GenreSortBy sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) SortDirection sortDir
+    ) {
+        return genreService.getAllGenresPages(page, pageSize, sortBy, sortDir);
     }
 
     @PutMapping("/{id}/song/{song_id}")
@@ -54,12 +59,7 @@ public class GenreController {
         genreService.deleteGenre(id);
     }
 
-    @GetMapping("/songs/{songId}")
-    public List<GenreDTO> getAllGenresBySongId(@PathVariable long songId) {
-        return genreService.getAllGenresBySongId(songId);
-    }
-
-    @GetMapping("/genres/{genreId}")
+    @GetMapping("/songs/{genreId}")
     public List<SongDTO> getAllSongsByGenreId(@PathVariable long genreId) {
         return genreService.getAllSongsByGenreId(genreId);
     }
@@ -68,5 +68,4 @@ public class GenreController {
     public GenreDTO findGenreByTitle(@PathVariable String title) {
         return genreService.findGenreByTitle(title);
     }
-
 }

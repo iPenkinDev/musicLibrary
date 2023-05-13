@@ -1,6 +1,9 @@
 package com.example.musicLibrary.controller;
 
 import com.example.musicLibrary.dto.AlbumDTO;
+import com.example.musicLibrary.dto.response.AlbumResponse;
+import com.example.musicLibrary.enumeration.AlbumSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import com.example.musicLibrary.services.AlbumService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +37,13 @@ public class AlbumController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<AlbumDTO>> getAllAlbums() {
-        List<AlbumDTO> albumDTOList = albumService.getAllAlbums();
-        return new ResponseEntity<>(albumDTOList, HttpStatus.OK);
+    public AlbumResponse getAllAlbumsPages(
+            @Valid @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "ID", required = false) AlbumSortBy sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) SortDirection sortDir
+    ) {
+        return albumService.getAllAlbumsPages(page, pageSize, sortBy, sortDir);
     }
 
     @PutMapping("/{id}")

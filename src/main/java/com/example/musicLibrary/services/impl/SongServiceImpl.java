@@ -5,13 +5,19 @@ import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.dao.GenreDAO;
 import com.example.musicLibrary.dao.SongDAO;
 import com.example.musicLibrary.dto.SongDTO;
+import com.example.musicLibrary.dto.response.SongResponse;
 import com.example.musicLibrary.entity.Album;
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
+import com.example.musicLibrary.enumeration.SongSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import com.example.musicLibrary.exception.ApplicationException;
 import com.example.musicLibrary.services.SongService;
 import com.example.musicLibrary.util.SongMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,12 +61,19 @@ public class SongServiceImpl implements SongService {
         return songMapper.mapToDTO(songDao.getSongById(id));
     }
 
-    @Override
-    public List<SongDTO> getAllSongs() {
-        List<Song> songList = songDao.getAllSongs();
-        if (songList.isEmpty())
-            throw new ApplicationException("Song list is empty");
-        return songList.stream().map(songMapper::mapToDTO).toList();
+    public SongResponse getAllSongsPages(int page, int pageSize, SongSortBy sortBy, SortDirection sortDir) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Song> allSongsPages = songDao.getAllSongsPages(pageable, sortBy, sortDir);
+        List<Song> content = allSongsPages.getContent();
+        List<SongDTO> songDTOList = content.stream().map(songMapper::mapToDTO).toList();
+        SongResponse songResponse = new SongResponse();
+        songResponse.setPage(allSongsPages.getNumber());
+        songResponse.setContent(songDTOList);
+        songResponse.setPageSize(allSongsPages.getSize());
+        songResponse.setTotalPage(allSongsPages.getTotalPages());
+        songResponse.setTotalElement(allSongsPages.getTotalElements());
+        songResponse.setLast(allSongsPages.isLast());
+        return songResponse;
     }
 
     @Override

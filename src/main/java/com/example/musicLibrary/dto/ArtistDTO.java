@@ -1,8 +1,12 @@
 package com.example.musicLibrary.dto;
 
 import com.example.musicLibrary.entity.Album;
-import jakarta.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
 import java.util.List;
 
 @Data
@@ -16,5 +20,6 @@ public class ArtistDTO {
     @Min(value = 1900, message = "Date of birth cannot be less than 1900")
     @Max(value = 2023, message = "Date of birth cannot be greater than 2023")
     private int yearOfBirth;
+    @JsonIgnore
     private List<Album> albums;
 }

@@ -3,15 +3,18 @@ package com.example.musicLibrary.services.impl;
 import com.example.musicLibrary.dao.AlbumDAO;
 import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.dto.AlbumDTO;
-import com.example.musicLibrary.dto.ArtistDTO;
+import com.example.musicLibrary.dto.response.AlbumResponse;
 import com.example.musicLibrary.entity.Album;
 import com.example.musicLibrary.entity.Artist;
+import com.example.musicLibrary.enumeration.AlbumSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import com.example.musicLibrary.exception.ApplicationException;
 import com.example.musicLibrary.services.AlbumService;
 import com.example.musicLibrary.util.AlbumMapper;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,13 +50,20 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public List<AlbumDTO> getAllAlbums() {
-        List<Album> albumList = albumDao.getAllAlbums();
-        if (albumList.isEmpty())
-            throw new ApplicationException("Albums not found");
-        return albumList.stream().map(albumMapper::mapToDTO).toList();
+    public AlbumResponse getAllAlbumsPages(int page, int pageSize, AlbumSortBy sortBy, SortDirection sortDir) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Album> allAlbumsPages = albumDao.getAllAlbumsPages(pageable, sortBy, sortDir);
+        List<Album> content = allAlbumsPages.getContent();
+        List<AlbumDTO> albumDTOList = content.stream().map(albumMapper::mapToDTO).toList();
+        AlbumResponse albumResponse = new AlbumResponse();
+        albumResponse.setPage(allAlbumsPages.getNumber());
+        albumResponse.setContent(albumDTOList);
+        albumResponse.setPageSize(allAlbumsPages.getSize());
+        albumResponse.setTotalPage(allAlbumsPages.getTotalPages());
+        albumResponse.setTotalElement(allAlbumsPages.getTotalElements());
+        albumResponse.setLast(allAlbumsPages.isLast());
+        return albumResponse;
     }
-
 
     @Override
     public AlbumDTO updateAlbum(AlbumDTO albumDTO, long id) {

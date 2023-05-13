@@ -1,6 +1,9 @@
 package com.example.musicLibrary.services;
 
 import com.example.musicLibrary.dto.SongDTO;
+import com.example.musicLibrary.dto.response.SongResponse;
+import com.example.musicLibrary.enumeration.SongSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +14,7 @@ public interface SongService {
 
     SongDTO getSongById(long id);
 
-    List<SongDTO> getAllSongs();
+    SongResponse getAllSongsPages(int page, int pageSize, SongSortBy sortBy, SortDirection sortDir);
 
     SongDTO updateSong(SongDTO songDTO, long id, long albumId, long genreId);
 

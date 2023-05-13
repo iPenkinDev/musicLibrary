@@ -1,7 +1,9 @@
 package com.example.musicLibrary.dto;
 
 import com.example.musicLibrary.entity.Artist;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data

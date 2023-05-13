@@ -1,9 +1,10 @@
 package com.example.musicLibrary.services;
 
 import com.example.musicLibrary.dto.ArtistDTO;
+import com.example.musicLibrary.dto.response.ArtistResponse;
+import com.example.musicLibrary.enumeration.ArtistSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public interface ArtistService {
@@ -11,7 +12,7 @@ public interface ArtistService {
 
     ArtistDTO getArtistById(long id);
 
-    List<ArtistDTO> getAllArtists();
+    ArtistResponse getAllArtistsPages(int page, int pageSize, ArtistSortBy sortBy, SortDirection sortDir);
 
     ArtistDTO updateArtist(ArtistDTO artistDTO, long id);
 

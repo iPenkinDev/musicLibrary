@@ -1,6 +1,9 @@
 package com.example.musicLibrary.services;
 
 import com.example.musicLibrary.dto.AlbumDTO;
+import com.example.musicLibrary.dto.response.AlbumResponse;
+import com.example.musicLibrary.enumeration.AlbumSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 
 import java.util.List;
 
@@ -10,7 +13,7 @@ public interface AlbumService {
 
     AlbumDTO getAlbumById(long id);
 
-    List<AlbumDTO> getAllAlbums();
+    AlbumResponse getAllAlbumsPages(int page, int pageSize, AlbumSortBy sortBy, SortDirection sortDir);
 
     AlbumDTO updateAlbum(AlbumDTO albumDTO, long id);
 

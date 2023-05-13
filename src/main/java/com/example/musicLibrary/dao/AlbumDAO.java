@@ -1,9 +1,18 @@
 package com.example.musicLibrary.dao;
 
 import com.example.musicLibrary.entity.Album;
+import com.example.musicLibrary.enumeration.AlbumSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Root;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +36,26 @@ public class AlbumDAO {
         return entityManager.find(Album.class, id);
     }
 
-    @Transactional(readOnly = true)
-    public List<Album> getAllAlbums() {
-        TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a", Album.class);
-        return query.getResultList();
+    @Transactional
+    public Page<Album> getAllAlbumsPages(Pageable pageable, AlbumSortBy sortBy, SortDirection sortDir) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Album> query = cb.createQuery(Album.class);
+        Root<Album> album = query.from(Album.class);
+        query.select(album);
+
+        addSortToCriteria(sortBy, sortDir, cb, query, album);
+
+        TypedQuery<Album> typedQuery = entityManager.createQuery(query);
+        typedQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+        typedQuery.setMaxResults(pageable.getPageSize());
+
+        List<Album> resultList = typedQuery.getResultList();
+
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        countQuery.select(cb.count(countQuery.from(Album.class)));
+        Long totalCount = entityManager.createQuery(countQuery).getSingleResult();
+
+        return new PageImpl<>(resultList, pageable, totalCount);
     }
 
     @Transactional
@@ -68,5 +93,24 @@ public class AlbumDAO {
         TypedQuery<Album> query = entityManager.createQuery("SELECT a FROM Album a WHERE a.title = :title", Album.class);
         query.setParameter("title", title);
         return query.getSingleResult();
+    }
+
+    private static void addSortToCriteria(AlbumSortBy sortBy, SortDirection sortDir, CriteriaBuilder cb, CriteriaQuery<Album> query, Root<Album> album) {
+        Order order = null;
+        if (sortDir == SortDirection.ASC) {
+            switch (sortBy) {
+                case ID -> order = cb.asc(album.get("id"));
+                case TITLE -> order = cb.asc(album.get("title"));
+                case YEAR -> order = cb.asc(album.get("year"));
+            }
+        } else {
+            switch (sortBy) {
+                case ID -> order = cb.desc(album.get("id"));
+                case TITLE -> order = cb.desc(album.get("title"));
+                case YEAR -> order = cb.desc(album.get("year"));
+            }
+
+        }
+        query.orderBy(order);
     }
 }

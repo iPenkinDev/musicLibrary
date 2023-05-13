@@ -1,6 +1,7 @@
 package com.example.musicLibrary.exception;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

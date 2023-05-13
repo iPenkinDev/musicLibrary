@@ -2,26 +2,24 @@ package com.example.musicLibrary.services;
 
 import com.example.musicLibrary.dto.GenreDTO;
 import com.example.musicLibrary.dto.SongDTO;
-import com.example.musicLibrary.dto.forms.GenreForm;
+import com.example.musicLibrary.dto.response.GenreResponse;
+import com.example.musicLibrary.enumeration.GenreSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface GenreService {
-    GenreDTO createGenre(GenreDTO genreDTO, long songId);
+    GenreDTO createGenre(GenreDTO genreDTO);
 
     GenreDTO getGenreById(long id);
 
-    List<GenreDTO> getAllGenres();
+    GenreResponse getAllGenresPages(int page, int pageSize, GenreSortBy sortBy, SortDirection sortDir);
 
     GenreDTO updateGenre(GenreDTO genreDTO, long id, long songId);
 
     void deleteGenre(long id);
-
-    void deleteGenreBySongId(long songId);
-
-    List<GenreDTO> getAllGenresBySongId(long songId);
 
     List<SongDTO> getAllSongsByGenreId(long genreId);
 

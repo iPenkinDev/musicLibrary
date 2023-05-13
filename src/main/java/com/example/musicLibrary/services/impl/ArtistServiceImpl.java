@@ -2,11 +2,17 @@ package com.example.musicLibrary.services.impl;
 
 import com.example.musicLibrary.dao.ArtistDAO;
 import com.example.musicLibrary.dto.ArtistDTO;
+import com.example.musicLibrary.dto.response.ArtistResponse;
 import com.example.musicLibrary.entity.Artist;
+import com.example.musicLibrary.enumeration.ArtistSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import com.example.musicLibrary.exception.ApplicationException;
 import com.example.musicLibrary.services.ArtistService;
 import com.example.musicLibrary.util.ArtistMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,16 +37,25 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ArtistDTO getArtistById(long id) {
         if (artistDao.getArtistById(id) == null) {
-           throw new ApplicationException("Artist with id " + id + " not found");
+            throw new ApplicationException("Artist with id " + id + " not found");
         }
         return artistMapper.mapToDTO(artistDao.getArtistById(id));
     }
 
     @Override
-    public List<ArtistDTO> getAllArtists() {
-        if (artistDao.getAllArtists().isEmpty())
-            throw new ApplicationException("Artists not found");
-        return artistDao.getAllArtists().stream().map(artistMapper::mapToDTO).toList();
+    public ArtistResponse getAllArtistsPages(int page, int pageSize, ArtistSortBy sortBy, SortDirection sortDir) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Artist> allArtistsPages = artistDao.getAllArtistsPages(pageable, sortBy, sortDir);
+        List<Artist> content = allArtistsPages.getContent();
+        List<ArtistDTO> artistDTOS = content.stream().map(artistMapper::mapToDTO).toList();
+        ArtistResponse artistResponse = new ArtistResponse();
+        artistResponse.setPage(allArtistsPages.getNumber());
+        artistResponse.setContent(artistDTOS);
+        artistResponse.setPageSize(allArtistsPages.getSize());
+        artistResponse.setTotalPage(allArtistsPages.getTotalPages());
+        artistResponse.setTotalElement(allArtistsPages.getTotalElements());
+        artistResponse.setLast(allArtistsPages.isLast());
+        return artistResponse;
     }
 
     @Override

@@ -1,14 +1,15 @@
 package com.example.musicLibrary.controller;
 
 import com.example.musicLibrary.dto.ArtistDTO;
+import com.example.musicLibrary.dto.response.ArtistResponse;
+import com.example.musicLibrary.enumeration.ArtistSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import com.example.musicLibrary.services.impl.ArtistServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/artists")
@@ -23,8 +24,8 @@ public class ArtistController {
 
     @PostMapping()
     public ResponseEntity<ArtistDTO> createArtist(@RequestBody @Valid ArtistDTO artistDTO) {
-            ArtistDTO artistCreateDTO = artistService.createArtist(artistDTO);
-            return ResponseEntity.ok(artistCreateDTO);
+        ArtistDTO artistCreateDTO = artistService.createArtist(artistDTO);
+        return ResponseEntity.ok(artistCreateDTO);
     }
 
     @GetMapping("/{id}")
@@ -33,8 +34,13 @@ public class ArtistController {
     }
 
     @GetMapping()
-    public List<ArtistDTO> getAllArtists() {
-        return artistService.getAllArtists();
+    public ArtistResponse getAllArtistsPages(
+            @Valid @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "ID", required = false) ArtistSortBy sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "ASC", required = false) SortDirection sortDir
+    ) {
+        return artistService.getAllArtistsPages(page, pageSize, sortBy, sortDir);
     }
 
     @PutMapping("/{id}")

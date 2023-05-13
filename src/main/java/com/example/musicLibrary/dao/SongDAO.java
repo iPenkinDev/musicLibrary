@@ -2,9 +2,18 @@ package com.example.musicLibrary.dao;
 
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
+import com.example.musicLibrary.enumeration.SongSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Root;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +37,26 @@ public class SongDAO {
         return entityManager.find(Song.class, id);
     }
 
-    @Transactional(readOnly = true)
-    public List<Song> getAllSongs() {
-        TypedQuery<Song> query = entityManager.createQuery("SELECT s FROM Song s", Song.class);
-        return query.getResultList();
+    @Transactional
+    public Page<Song> getAllSongsPages(Pageable pageable, SongSortBy sortBy, SortDirection sortDir) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Song> query = cb.createQuery(Song.class);
+        Root<Song> song = query.from(Song.class);
+        query.select(song);
+
+        addSortToCriteria(sortBy, sortDir, cb, query, song);
+
+        TypedQuery<Song> typedQuery = entityManager.createQuery(query);
+        typedQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+        typedQuery.setMaxResults(pageable.getPageSize());
+
+        List<Song> resultList = typedQuery.getResultList();
+
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        countQuery.select(cb.count(countQuery.from(Song.class)));
+        Long totalCount = entityManager.createQuery(countQuery).getSingleResult();
+
+        return new PageImpl<>(resultList, pageable, totalCount);
     }
 
     @Transactional
@@ -97,5 +122,24 @@ public class SongDAO {
         TypedQuery<Song> query = entityManager.createQuery("SELECT s FROM Song s WHERE s.title = :title", Song.class);
         query.setParameter("title", title);
         return query.getSingleResult();
+    }
+
+    private static void addSortToCriteria(SongSortBy sortBy, SortDirection sortDir, CriteriaBuilder cb, CriteriaQuery<Song> query, Root<Song> song) {
+        Order order = null;
+        if (sortDir == SortDirection.ASC) {
+            switch (sortBy) {
+                case ID -> order = cb.asc(song.get("id"));
+                case TITLE -> order = cb.asc(song.get("title"));
+                case YEAR -> order = cb.asc(song.get("year"));
+            }
+        } else {
+            switch (sortBy) {
+                case ID -> order = cb.desc(song.get("id"));
+                case TITLE -> order = cb.desc(song.get("title"));
+                case YEAR -> order = cb.desc(song.get("year"));
+            }
+
+        }
+        query.orderBy(order);
     }
 }

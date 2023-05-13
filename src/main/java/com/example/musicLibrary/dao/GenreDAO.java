@@ -2,10 +2,19 @@ package com.example.musicLibrary.dao;
 
 import com.example.musicLibrary.entity.Genre;
 import com.example.musicLibrary.entity.Song;
+import com.example.musicLibrary.enumeration.GenreSortBy;
+import com.example.musicLibrary.enumeration.SortDirection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,10 +44,26 @@ public class GenreDAO {
         return entityManager.find(Genre.class, id);
     }
 
-    @Transactional(readOnly = true)
-    public List<Genre> getAllGenres() {
-        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g", Genre.class);
-        return query.getResultList();
+    @Transactional
+    public Page<Genre> getAllGenresPages(Pageable pageable, GenreSortBy sortBy, SortDirection sortDir) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Genre> query = cb.createQuery(Genre.class);
+        Root<Genre> genre = query.from(Genre.class);
+        query.select(genre);
+
+        addSortToCriteria(sortBy, sortDir, cb, query, genre);
+
+        TypedQuery<Genre> typedQuery = entityManager.createQuery(query);
+        typedQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+        typedQuery.setMaxResults(pageable.getPageSize());
+
+        List<Genre> resultList = typedQuery.getResultList();
+
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        countQuery.select(cb.count(countQuery.from(Genre.class)));
+        Long totalCount = entityManager.createQuery(countQuery).getSingleResult();
+
+        return new PageImpl<>(resultList, pageable, totalCount);
     }
 
     @Transactional
@@ -55,21 +80,6 @@ public class GenreDAO {
 
     }
 
-    @Transactional
-    public void deleteGenreBySongId(long songId) {
-        Song song = entityManager.find(Song.class, songId);
-        List<Genre> genres = song.getGenres();
-        for (Genre genre : genres) {
-            genre.getSongs().remove(song);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public List<Genre> getAllGenresBySongId(long songId) {
-        Song song = entityManager.find(Song.class, songId);
-        return song.getGenres();
-    }
-
     @Transactional(readOnly = true)
     public List<Song> getAllSongsByGenreId(long genreId) {
         Genre genre = entityManager.find(Genre.class, genreId);
@@ -82,5 +92,22 @@ public class GenreDAO {
         TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g WHERE g.title = :title", Genre.class);
         query.setParameter("title", title);
         return query.getSingleResult();
+    }
+
+    private static void addSortToCriteria(GenreSortBy sortBy, SortDirection sortDir, CriteriaBuilder cb, CriteriaQuery<Genre> query, Root<Genre> genre) {
+        Order order = null;
+        if (sortDir == SortDirection.ASC) {
+            switch (sortBy) {
+                case ID -> order = cb.asc(genre.get("id"));
+                case TITLE -> order = cb.asc(genre.get("title"));
+            }
+        } else {
+            switch (sortBy) {
+                case ID -> order = cb.desc(genre.get("id"));
+                case TITLE -> order = cb.desc(genre.get("title"));
+            }
+
+        }
+        query.orderBy(order);
     }
 }
