@@ -6,7 +6,7 @@ The program imitate simple API. Four entity has OneToMany and ManyToMany relatio
 ### Technology stack:
  -Java 17    
  -Spring Boot  
- -Apache Maven  
+ -Gradle  
  -PostgreSQL    
  -Hibernate  
  -Swagger  
