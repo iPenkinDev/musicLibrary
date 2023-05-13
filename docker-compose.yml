@@ -5,26 +5,26 @@ services:
     image: postgres:alpine
     ports:
       - "5432:5432"
-      - "8080:8080"
+#      - "8080:8080"
     environment:
       POSTGRES_DB: project_db
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     volumes:
         - db-data:/var/lib/postgresql/data
-  app:
-    image: music-library-app:latest
-    restart: always
-    depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: project_db
-      DB_USER: root
-      DB_PASSWORD: root
-    network_mode:
-      service:db
+#  app:
+#    image: music-library-app:latest
+#    restart: always
+#    depends_on:
+#      - db
+#    environment:
+#      DB_HOST: db
+#      DB_PORT: 5432
+#      DB_NAME: project_db
+#      DB_USER: root
+#      DB_PASSWORD: root
+#    network_mode:
+#      service:db
 volumes:
   db-data:
 

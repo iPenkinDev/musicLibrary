@@ -106,7 +106,6 @@ public class GenreDAO {
                 case ID -> order = cb.desc(genre.get("id"));
                 case TITLE -> order = cb.desc(genre.get("title"));
             }
-
         }
         query.orderBy(order);
     }

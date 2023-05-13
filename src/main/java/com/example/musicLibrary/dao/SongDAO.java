@@ -138,7 +138,6 @@ public class SongDAO {
                 case TITLE -> order = cb.desc(song.get("title"));
                 case YEAR -> order = cb.desc(song.get("year"));
             }
-
         }
         query.orderBy(order);
     }

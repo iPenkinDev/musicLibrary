@@ -109,7 +109,6 @@ public class AlbumDAO {
                 case TITLE -> order = cb.desc(album.get("title"));
                 case YEAR -> order = cb.desc(album.get("year"));
             }
-
         }
         query.orderBy(order);
     }

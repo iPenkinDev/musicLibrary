@@ -90,16 +90,15 @@ public class ArtistDAO {
                 case ID -> order = cb.asc(artist.get("id"));
                 case NAME -> order = cb.asc(artist.get("name"));
                 case COUNTRY -> order = cb.asc(artist.get("country"));
-                case DATE_OF_BIRTH -> order = cb.asc(artist.get("date_of_birth"));
+                case DATE_OF_BIRTH -> order = cb.asc(artist.get("yearOfBirth"));
             }
         } else {
             switch (sortBy) {
                 case ID -> order = cb.desc(artist.get("id"));
                 case NAME -> order = cb.desc(artist.get("name"));
                 case COUNTRY -> order = cb.desc(artist.get("country"));
-                case DATE_OF_BIRTH -> order = cb.desc(artist.get("date_of_birth"));
+                case DATE_OF_BIRTH -> order = cb.desc(artist.get("yearOfBirth"));
             }
-
         }
         query.orderBy(order);
     }
