@@ -32,7 +32,7 @@ public class ArtistDAO {
 
     @Transactional
     public Artist createArtist(Artist artist) {
-        entityManager.persist(artist);
+        entityManager.merge(artist);
         return artist;
     }
 

@@ -35,7 +35,7 @@ public class GenreDAO {
 
     @Transactional
     public Genre createGenre(Genre genre) {
-        entityManager.persist(genre);
+        entityManager.merge(genre);
         return genre;
     }
 

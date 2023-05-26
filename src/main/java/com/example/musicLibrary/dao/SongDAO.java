@@ -28,7 +28,7 @@ public class SongDAO {
 
     @Transactional
     public Song createSong(Song song) {
-        entityManager.persist(song);
+        entityManager.merge(song);
         return song;
     }
 

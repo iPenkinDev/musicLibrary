@@ -27,7 +27,7 @@ public class AlbumDAO {
 
     @Transactional
     public Album createAlbum(Album album) {
-        entityManager.persist(album);
+        entityManager.merge(album);
         return album;
     }
 
